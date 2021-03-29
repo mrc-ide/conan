@@ -1,6 +1,3 @@
-## All code in this file (and all functions that they call) must use
-## only functions included in base R and default packages.
-
 ##' Create a bootstrap library
 ##'
 ##' @title Create a bootstrap library
