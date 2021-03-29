@@ -24,6 +24,9 @@ can be names of cran packages or github references etc; see
 \item{policy}{Should be either "lazy" or "upgrade", with a default
 of "upgrade"}
 
+\item{repos}{A character vector of repositories to use when
+installing. A suitable CRAN repo will be added if not detected.}
+
 \item{path_bootstrap}{The path to find the "bootstrap library" at
 (created via \code{\link[=conan_bootstrap]{conan_bootstrap()}}; this contains the
 packages required to install your packages, kept separate from

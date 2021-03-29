@@ -32,6 +32,9 @@ to a temporary directory.}
 can be names of cran packages or github references etc; see
 \code{\link[pkgdepends:pkg_installation_proposal]{pkgdepends::new_pkg_installation_proposal()}} for more details}
 
+\item{repos}{A character vector of repositories to use when
+installing. A suitable CRAN repo will be added if not detected.}
+
 \item{policy}{Should be either "lazy" or "upgrade", with a default
 of "upgrade"}
 }

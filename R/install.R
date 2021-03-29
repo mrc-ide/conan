@@ -25,6 +25,9 @@
 ##' @param policy Should be either "lazy" or "upgrade", with a default
 ##'   of "upgrade"
 ##'
+##' @param repos A character vector of repositories to use when
+##'   installing. A suitable CRAN repo will be added if not detected.
+##'
 ##' @return Nothing, called for side effects of creating a library at
 ##'   `lib`.
 ##'
