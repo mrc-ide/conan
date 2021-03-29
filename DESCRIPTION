@@ -19,6 +19,7 @@ Suggests:
     callr,
     docopt,
     mockery,
+    pkgcache,
     pkgdepends (>= 0.1.0),
     testthat,
     withr
