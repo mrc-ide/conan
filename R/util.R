@@ -36,12 +36,12 @@ extract_code <- function(nm, env = NULL) {
 }
 
 
-clean_repos <- function(repos) {
+clean_repos <- function(repos, cran = cran_rcloud) {
   if (is.null(repos)) {
-    return(c(CRAN = cran_rcloud))
+    return(c(CRAN = cran))
   }
   if (!("CRAN" %in% names(repos)) || repos[["CRAN"]] == "@CRAN@") {
-    repos[["CRAN"]] <- cran_rcloud
+    repos[["CRAN"]] <- cran
   }
   repos
 }
@@ -62,7 +62,6 @@ write_script_exec <- function(code, path) {
 deparse_str <- function(x) {
   paste(deparse(x), collapse = "\n")
 }
-
 
 
 cran_rcloud <- "https://cloud.r-project.org"
