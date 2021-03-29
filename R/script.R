@@ -28,27 +28,11 @@ conan_script <- function(name, path) {
     bootstrap = "main_bootstrap",
     stop(sprintf("Unknown script '%s'", name)))
 
-  env <- environment(conan_script)
-  fns <- find_functions(target, env)
-
   code <- c(
     "#!/usr/bin/env Rscript",
     sprintf('cran_rcloud <- "%s"', cran_rcloud),
-    unlist(lapply(fns, deparse_fn)),
+    extract_code(target),
     sprintf("%s()", target))
 
-  dest <- file.path(path, paste0("conan-", name))
-  writeLines(code, dest)
-  Sys.chmod(dest, "755")
-  invisible(dest)
-}
-
-
-deparse_fn <- function(nm, ...) {
-  value <- trimws(deparse(get(nm, ...)), "right")
-  if (grepl("%", nm)) {
-    nm <- sprintf("`%s`", nm)
-  }
-  value[[1]] <- sprintf("%s <- %s", nm, value[[1]])
-  value
+  write_script_exec(code, file.path(path, paste0("conan-", name)))
 }

@@ -46,3 +46,15 @@ main_install <- function(args = commandArgs(TRUE)) {
                      path_bootstrap = dat$path_bootstrap,
                      path_cache = dat$path_cache)
 }
+
+
+parse_main_conan <- function(args = commandArgs(TRUE), name = "conan") {
+  usage <- "Usage:
+%s <lib>"
+  usage <- sprintf(usage, name)
+  if (length(args) != 1 || grepl("^-", args)) {
+    stop(usage, call. = FALSE)
+  }
+
+  list(lib = args)
+}

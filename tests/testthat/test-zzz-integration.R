@@ -48,3 +48,24 @@ test_that("Can install packages", {
 
   expect_true(all(c("cpp11", "dde", "ring") %in% dir(path_lib)))
 })
+
+
+test_that("High level interface", {
+  testthat::skip_if_offline()
+  skip_unless_ci()
+
+  path_bootstrap <- .libPaths()[[1]]
+
+  path <- conan(tempfile(),
+                c("cpp11", "dde"),
+                "https://mrc-ide.github.io/drat")
+  expect_true(file.exists(path))
+
+  path_lib <- tempfile()
+  env <- c(callr::rcmd_safe_env(),
+           "CONAN_PATH_BOOTSTRAP" = path_bootstrap)
+  callr::rscript(c("--vanilla", path, path_lib),
+                 echo = TRUE, env = env)
+
+  expect_true(all(c("cpp11", "dde", "ring") %in% dir(path_lib)))
+})

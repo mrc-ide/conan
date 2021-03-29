@@ -61,3 +61,15 @@ test_that("Pass arguments through to target", {
                   list(lib = "mylib", plan = "plan.json",
                        path_bootstrap = NULL, path_cache = NULL))
 })
+
+
+test_that("parse_main_conan", {
+  expect_equal(parse_main_conan("lib", "name"), list(lib = "lib"))
+
+  expect_error(
+    parse_main_conan(c("path", "lib"), "name"),
+    "Usage:.*name <lib>")
+  expect_error(
+    parse_main_conan(c("--path-bootstrap", "path", "lib"), "name"),
+    "Usage:.*name <lib>")
+})
