@@ -29,10 +29,6 @@ test_that("Can install packages", {
   skip_unless_ci()
 
   path_bootstrap <- .libPaths()[[1]]
-  expect_equal(
-    missing_packages(c("docopt", "pkgcache", "pkgdepends"), path_bootstrap),
-    character(0))
-
   path_scripts <- tempfile()
   conan_scripts(path_scripts)
 
