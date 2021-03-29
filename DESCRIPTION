@@ -17,7 +17,7 @@ Imports:
     jsonlite
 Suggests:
     callr,
-    jsonlite,
+    docopt,
     mockery,
     pkgdepends (>= 0.1.0),
     testthat,
