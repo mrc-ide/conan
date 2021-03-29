@@ -4,7 +4,7 @@
 \alias{conan}
 \title{Conan the Librarian}
 \usage{
-conan(filename, packages, repos = NULL, policy = "upgrade")
+conan(filename, packages, repos = NULL, policy = "upgrade", dryrun = FALSE)
 }
 \arguments{
 \item{filename}{Path to write the install script to. Any directory
@@ -19,6 +19,10 @@ installing. A suitable CRAN repo will be added if not detected.}
 
 \item{policy}{Should be either "lazy" or "upgrade", with a default
 of "upgrade"}
+
+\item{dryrun}{Logical, indicating if we should try a dryrun with
+\code{\link[=conan_dryrun]{conan_dryrun()}}; if this passes your requested packages
+seem satisfiable.}
 }
 \value{
 Invisibly, the path to the created script. This can be run

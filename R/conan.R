@@ -8,6 +8,10 @@
 ##' @param filename Path to write the install script to. Any directory
 ##'   components will be created as needed.
 ##'
+##' @param dryrun Logical, indicating if we should try a dryrun with
+##'   [conan::conan_dryrun()]; if this passes your requested packages
+##'   seem satisfiable.
+##'
 ##' @inheritParams conan_install
 ##'
 ##' @return Invisibly, the path to the created script. This can be run
@@ -20,9 +24,11 @@
 ##' @examples
 ##' path <- conan::conan(tempfile(), "cpp11")
 ##' writeLines(tail(readLines(path)))
-conan <- function(filename, packages, repos = NULL, policy = "upgrade") {
-  ## TODO: check that we incoming packages, repos and policy are valid
-  ## TODO: test to see if an installation plan is possible?
+conan <- function(filename, packages, repos = NULL, policy = "upgrade",
+                  dryrun = FALSE) {
+  if (dryrun) {
+    conan_dryrun(packages, repos, policy)
+  }
   code <- c(
     "#!/usr/bin/env Rscript",
     sprintf('cran_rcloud <- "%s"', cran_rcloud),
