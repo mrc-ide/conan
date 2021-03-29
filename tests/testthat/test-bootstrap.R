@@ -8,8 +8,8 @@ test_that("Skip installed packages", {
   mockery::stub(conan_bootstrap, "install_packages", mock_install)
 
   path <- tempfile()
-  conan_bootstrap(path, FALSE)
   conan_bootstrap(path, TRUE)
+  conan_bootstrap(path, FALSE)
 
   mockery::expect_called(mock_missing, 1)
   mockery::expect_called(mock_install, 2)
@@ -48,11 +48,13 @@ test_that("Can load docopt in bootstrap", {
       lib_base,
       docopt_bootstrap()))
 
+  libs <- vapply(c(lib_bs, lib_base), normalizePath, "", USE.NAMES = FALSE)
+
   mockery::expect_called(mock_load_ns, 1)
   mockery::expect_called(mock_install, 0)
   args <- mockery::mock_args(mock_load_ns)[[1]]
   expect_equal(args[[1]], "docopt")
-  expect_equal(args[[2]][1:3], c(lib_bs, lib_base))
+  expect_equal(args[[2]][1:3], libs)
 })
 
 
@@ -99,6 +101,7 @@ test_that("Can install docopt in bootstrap", {
 test_that("Install packages will skip over empty list", {
   mock_install <- mockery::mock(cycle = TRUE)
   mockery::stub(install_packages, "utils::install.packages", mock_install)
+  lib <- tempfile()
   expect_silent(install_packages(character(0), lib, cran_rcloud))
   expect_false(file.exists(lib))
   mockery::expect_called(mock_install, 0)
