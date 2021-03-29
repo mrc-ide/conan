@@ -63,7 +63,7 @@ install_packages <- function(packages, lib, repos) {
   msg <- missing_packages(packages, lib)
   if (length(msg) > 0) {
     stop("Failed to install package: ",
-         paste(sprintf('%s', msg), collapse = ", "))
+         paste(sprintf("'%s'", msg), collapse = ", "))
   }
 }
 
