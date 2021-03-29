@@ -6,3 +6,13 @@ test_that("null-or-value works", {
   expect_equal(NULL %||% NULL, NULL)
   expect_equal(NULL %||% 2, 2)
 })
+
+
+test_that("clean repos fixes broken repos", {
+  expect_equal(clean_repos(NULL), c(CRAN = cran_rcloud))
+  expect_equal(clean_repos(c(CRAN = "@CRAN@")), c(CRAN = cran_rcloud))
+  expect_equal(clean_repos(c(CRAN = "https://cran.example.com")),
+               c(CRAN = "https://cran.example.com"))
+  expect_equal(clean_repos("https://example.com"),
+               c("https://example.com", CRAN = cran_rcloud))
+})

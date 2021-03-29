@@ -13,5 +13,12 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 URL: https://github.com/mrc-ide/conan
 BugReports: https://github.com/mrc-ide/conan/issues
+Imports:
+    jsonlite
 Suggests:
-    testthat
+    callr,
+    jsonlite,
+    mockery,
+    pkgdepends (>= 0.1.0),
+    testthat,
+    withr
