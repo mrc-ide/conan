@@ -1,3 +1,15 @@
+##' Write conan's scripts to a directory
+##'
+##' @title Write scripts to directory
+##'
+##' @param path Path to write to
+##'
+##' @return Nothing, called for its side effects
+##' @export
+##' @examples
+##' path <- tempfile()
+##' conan::conan_scripts(path)
+##' dir(path)
 conan_scripts <- function(path) {
   for (name in c("bootstrap", "install")) {
     conan_script(name, path)
@@ -21,6 +33,7 @@ conan_script <- function(name, path) {
 
   code <- c(
     "#!/usr/bin/env Rscript",
+    sprintf('cran_rcloud <- "%s"', cran_rcloud),
     unlist(lapply(fns, deparse_fn)),
     sprintf("%s()", target))
 
@@ -33,6 +46,9 @@ conan_script <- function(name, path) {
 
 deparse_fn <- function(nm, ...) {
   value <- trimws(deparse(get(nm, ...)), "right")
+  if (grepl("%", nm)) {
+    nm <- sprintf("`%s`", nm)
+  }
   value[[1]] <- sprintf("%s <- %s", nm, value[[1]])
   value
 }

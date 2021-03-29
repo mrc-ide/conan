@@ -29,10 +29,10 @@ conan_bootstrap <- function(path, upgrade = FALSE) {
   on.exit(.libPaths(prev))
   .libPaths(path)
   req <- c("docopt", "pkgcache", "pkgdepends")
-  if (upgrade) {
+  if (!upgrade) {
     req <- missing_packages(req, path)
   }
-  install_packages(req, path, "https://cloud.r-project.org")
+  install_packages(req, path, cran_rcloud)
   message("Success!")
   invisible(path)
 }
@@ -49,7 +49,7 @@ docopt_bootstrap <- function() {
     error = function(e) {
       lib <- tempfile()
       dir.create(lib, FALSE, TRUE)
-      install_packages("docopt", lib, "https://cloud.r-project.org")
+      install_packages("docopt", lib, cran_rcloud)
       loadNamespace("docopt", lib)
     })
 }

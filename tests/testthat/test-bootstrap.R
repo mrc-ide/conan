@@ -17,13 +17,12 @@ test_that("Skip installed packages", {
     mockery::mock_args(mock_missing)[[1]],
     list(c("docopt", "pkgcache", "pkgdepends"), path))
 
-  repo <- "https://cloud.r-project.org"
   expect_equal(
     mockery::mock_args(mock_install)[[1]],
-    list(c("docopt", "pkgcache", "pkgdepends"), path, repo))
+    list(c("docopt", "pkgcache", "pkgdepends"), path, cran_rcloud))
   expect_equal(
     mockery::mock_args(mock_install)[[2]],
-    list("docopt", path, repo))
+    list("docopt", path, cran_rcloud))
 })
 
 
@@ -86,7 +85,7 @@ test_that("Can install docopt in bootstrap", {
   args <- mockery::mock_args(mock_install)[[1]]
   lib_tmp <- args[[2]]
   expect_false(lib_tmp %in% c(.libPaths(), lib_base, lib_bs))
-  expect_equal(args, list("docopt", lib_tmp, "https://cloud.r-project.org"))
+  expect_equal(args, list("docopt", lib_tmp, cran_rcloud))
 
   args <- mockery::mock_args(mock_load_ns)[[1]]
   expect_equal(args[[1]], "docopt")
@@ -100,9 +99,7 @@ test_that("Can install docopt in bootstrap", {
 test_that("Install packages will skip over empty list", {
   mock_install <- mockery::mock(cycle = TRUE)
   mockery::stub(install_packages, "utils::install.packages", mock_install)
-  repos <- "https://cloud.r-project.org"
-  lib <- tempfile()
-  expect_silent(install_packages(character(0), lib, repos))
+  expect_silent(install_packages(character(0), lib, cran_rcloud))
   expect_false(file.exists(lib))
   mockery::expect_called(mock_install, 0)
 })
@@ -111,12 +108,11 @@ test_that("Install packages will skip over empty list", {
 test_that("Install packages will error if installation fails", {
   mock_install <- mockery::mock(cycle = TRUE)
   mockery::stub(install_packages, "utils::install.packages", mock_install)
-  repos <- "https://cloud.r-project.org"
   lib <- tempfile()
   dir.create(lib, FALSE, TRUE)
   expect_error(
-    install_packages(c("pkg.a", "pkg.b"), lib, repos))
+    install_packages(c("pkg.a", "pkg.b"), lib, cran_rcloud))
   mockery::expect_called(mock_install, 1)
   expect_equal(mockery::mock_args(mock_install)[[1]],
-               list(c("pkg.a", "pkg.b"), lib, repos))
+               list(c("pkg.a", "pkg.b"), lib, cran_rcloud))
 })

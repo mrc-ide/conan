@@ -3,4 +3,5 @@
 export(conan_bootstrap)
 export(conan_install)
 export(conan_install_plan)
+export(conan_scripts)
 export(conan_write_plan)
