@@ -48,15 +48,12 @@ test_that("Can load docopt in bootstrap", {
       lib_base,
       docopt_bootstrap()))
 
-  clean_paths <- function(p) {
-    vapply(p, normalizePath, "", USE.NAMES = FALSE)
-  }
-
   mockery::expect_called(mock_load_ns, 1)
   mockery::expect_called(mock_install, 0)
   args <- mockery::mock_args(mock_load_ns)[[1]]
   expect_equal(args[[1]], "docopt")
-  expect_equal(clean_paths(args[[2]][1:3]), clean_paths(c(lib_bs, lib_base)))
+  expect_equal(clean_paths(args[[2]][1:3]),
+               clean_paths(c(lib_bs, lib_base)))
 })
 
 
@@ -93,7 +90,8 @@ test_that("Can install docopt in bootstrap", {
 
   args <- mockery::mock_args(mock_load_ns)[[1]]
   expect_equal(args[[1]], "docopt")
-  expect_equal(args[[2]][1:3], c(lib_bs, lib_base))
+  expect_equal(clean_paths(args[[2]][1:3]),
+               clean_paths(c(lib_bs, lib_base)))
 
   expect_equal(mockery::mock_args(mock_load_ns)[[2]],
                list("docopt", lib_tmp))
