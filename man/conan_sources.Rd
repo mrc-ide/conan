@@ -12,7 +12,11 @@ can be names of cran packages or github references etc; see
 \code{\link[pkgdepends:pkg_installation_proposal]{pkgdepends::new_pkg_installation_proposal()}} for more details}
 
 \item{repos}{A character vector of repositories to use when
-installing. A suitable CRAN repo will be added if not detected.}
+installing. A suitable CRAN repo will be added if not detected
+(using the \code{cran} argument if provided)}
+
+\item{cran}{Fallback CRAN repo to use. If not given we will use
+\verb{https://cloud.r-project.org}}
 }
 \value{
 An object of type \code{conan_sources} which can be used later

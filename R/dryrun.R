@@ -11,10 +11,8 @@
 ##' @export
 ##' @examples
 ##' conan::conan_dryrun("cpp11")
-conan_dryrun <- function(packages, repos = NULL, policy = "upgrade",
-                         lib = NULL, error = TRUE) {
-  repos <- clean_repos(repos)
-
+conan_dryrun <- function(packages, policy = "upgrade", repos = NULL,
+                         cran = NULL, lib = NULL, error = TRUE) {
   lib <- lib %||% tempfile()
   dir.create(lib, FALSE, TRUE)
 
@@ -25,7 +23,7 @@ conan_dryrun <- function(packages, repos = NULL, policy = "upgrade",
   withr::with_libpaths(
     lib,
     withr::with_options(
-      c(repos = clean_repos(repos)), {
+      c(repos = clean_repos(repos, cran)), {
         proposal <- pkgdepends::new_pkg_installation_proposal(
           packages, config, policy = policy)
         proposal$solve()

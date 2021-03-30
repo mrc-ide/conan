@@ -4,7 +4,14 @@
 \alias{conan}
 \title{Conan the Librarian}
 \usage{
-conan(filename, packages, repos = NULL, policy = "upgrade", dryrun = FALSE)
+conan(
+  filename,
+  packages,
+  repos = NULL,
+  policy = "upgrade",
+  cran = NULL,
+  dryrun = FALSE
+)
 }
 \arguments{
 \item{filename}{Path to write the install script to. Any directory
@@ -15,10 +22,14 @@ can be names of cran packages or github references etc; see
 \code{\link[pkgdepends:pkg_installation_proposal]{pkgdepends::new_pkg_installation_proposal()}} for more details}
 
 \item{repos}{A character vector of repositories to use when
-installing. A suitable CRAN repo will be added if not detected.}
+installing. A suitable CRAN repo will be added if not detected
+(using the \code{cran} argument if provided)}
 
 \item{policy}{Should be either "lazy" or "upgrade", with a default
 of "upgrade"}
+
+\item{cran}{Fallback CRAN repo to use. If not given we will use
+\verb{https://cloud.r-project.org}}
 
 \item{dryrun}{Logical, indicating if we should try a dryrun with
 \code{\link[=conan_dryrun]{conan_dryrun()}}; if this passes your requested packages

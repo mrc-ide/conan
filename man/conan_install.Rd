@@ -9,6 +9,7 @@ conan_install(
   packages,
   policy = "upgrade",
   repos = NULL,
+  cran = NULL,
   path_bootstrap = NULL,
   path_cache = NULL
 )
@@ -25,7 +26,11 @@ can be names of cran packages or github references etc; see
 of "upgrade"}
 
 \item{repos}{A character vector of repositories to use when
-installing. A suitable CRAN repo will be added if not detected.}
+installing. A suitable CRAN repo will be added if not detected
+(using the \code{cran} argument if provided)}
+
+\item{cran}{Fallback CRAN repo to use. If not given we will use
+\verb{https://cloud.r-project.org}}
 
 \item{path_bootstrap}{The path to find the "bootstrap library" at
 (created via \code{\link[=conan_bootstrap]{conan_bootstrap()}}; this contains the

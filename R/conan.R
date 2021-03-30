@@ -25,7 +25,7 @@
 ##' path <- conan::conan(tempfile(), "cpp11")
 ##' writeLines(tail(readLines(path)))
 conan <- function(filename, packages, repos = NULL, policy = "upgrade",
-                  dryrun = FALSE) {
+                  cran = NULL, dryrun = FALSE) {
   if (dryrun) {
     conan_dryrun(packages, repos, policy)
   }
@@ -34,7 +34,7 @@ conan <- function(filename, packages, repos = NULL, policy = "upgrade",
     extract_code(c("conan_install", "parse_main_conan")),
     sprintf('.dat <- parse_main_conan(name = "%s")', basename(filename)),
     sprintf(".packages <- %s", deparse_str(unname(packages))),
-    sprintf(".repos <- %s", deparse_str(clean_repos(repos))),
+    sprintf(".repos <- %s", deparse_str(clean_repos(repos, cran))),
     sprintf(".policy <- %s", deparse_str(policy)),
     ".lib <- .dat$lib",
     "conan_install(.lib, .packages, policy = .policy, repos = .repos)")

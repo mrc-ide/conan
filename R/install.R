@@ -26,7 +26,11 @@
 ##'   of "upgrade"
 ##'
 ##' @param repos A character vector of repositories to use when
-##'   installing. A suitable CRAN repo will be added if not detected.
+##'   installing. A suitable CRAN repo will be added if not detected
+##'   (using the `cran` argument if provided)
+##'
+##' @param cran Fallback CRAN repo to use. If not given we will use
+##'   `https://cloud.r-project.org`
 ##'
 ##' @return Nothing, called for side effects of creating a library at
 ##'   `lib`.
@@ -34,7 +38,8 @@
 ##' @export
 ##' @author Richard Fitzjohn
 conan_install <- function(lib, packages, policy = "upgrade", repos = NULL,
-                          path_bootstrap = NULL, path_cache = NULL) {
+                          cran = NULL, path_bootstrap = NULL,
+                          path_cache = NULL) {
   path_bootstrap <- conan_path_bootstrap(path_bootstrap)
   path_cache <- conan_path_cache(path_cache)
 
@@ -50,7 +55,7 @@ conan_install <- function(lib, packages, policy = "upgrade", repos = NULL,
     config$package_cache_dir <- path_cache
   }
 
-  repos <- clean_repos(repos)
+  repos <- clean_repos(repos, cran)
 
   message("CONAN THE LIBRARIAN")
   message("Library:   ", lib)
