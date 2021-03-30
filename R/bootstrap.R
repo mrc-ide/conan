@@ -21,6 +21,8 @@ conan_bootstrap <- function(path, upgrade = FALSE) {
   message("CONAN THE LIBRARIAN I: the bootstrappening")
   message(sprintf("Installing bootstrap library into '%s'", path))
 
+  ## TODO: We might try and load these packges?
+
   dir.create(path, FALSE, TRUE)
   prev <- .libPaths()
   on.exit(.libPaths(prev))
@@ -29,7 +31,7 @@ conan_bootstrap <- function(path, upgrade = FALSE) {
   if (!upgrade) {
     req <- missing_packages(req, path)
   }
-  install_packages(req, path, cran_rcloud)
+  install_packages(req, path, default_cran())
   message("Success!")
   invisible(path)
 }
@@ -46,7 +48,7 @@ docopt_bootstrap <- function() {
     error = function(e) {
       lib <- tempfile()
       dir.create(lib, FALSE, TRUE)
-      install_packages("docopt", lib, cran_rcloud)
+      install_packages("docopt", lib, default_cran())
       loadNamespace("docopt", lib)
     })
 }

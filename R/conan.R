@@ -31,7 +31,6 @@ conan <- function(filename, packages, repos = NULL, policy = "upgrade",
   }
   code <- c(
     "#!/usr/bin/env Rscript",
-    sprintf('cran_rcloud <- "%s"', cran_rcloud),
     extract_code(c("conan_install", "parse_main_conan")),
     sprintf('.dat <- parse_main_conan(name = "%s")', basename(filename)),
     sprintf(".packages <- %s", deparse_str(unname(packages))),

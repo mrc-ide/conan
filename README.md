@@ -27,11 +27,11 @@ That will create a file like:
 
 ```r
 #!/usr/bin/env Rscript
-cran_rcloud <- "https://cloud.r-project.org"
 `%||%` <- function (x, y)
 {
     if (is.null(x))
         y
+    else x
 [... skip ...]
 .packages <- c("cpp11", "dust", "mrc-ide/mcstate@some-feature")
 .repos <- c("https://ncov-ic.github.io/drat", CRAN = "https://cloud.r-project.org"

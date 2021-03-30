@@ -30,7 +30,6 @@ conan_script <- function(name, path) {
 
   code <- c(
     "#!/usr/bin/env Rscript",
-    sprintf('cran_rcloud <- "%s"', cran_rcloud),
     extract_code(target),
     sprintf("%s()", target))
 
