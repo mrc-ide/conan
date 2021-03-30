@@ -15,8 +15,12 @@ conan_sources <- function(packages, repos = NULL, cran = NULL) {
   ## Standardise references as this will make working with them later
   ## easier:
   for (i in seq_along(packages)) {
+    ## Cope with windows paths
+    if (grepl("^[A-Za-z]:", packages[[i]])) {
+      packages[[i]] <- paste0("local::", packages[[i]])
+    }
     dat <- pkgdepends::parse_pkg_ref(packages[[i]])
-    if (dat$type == "local" && !grepl("^local::", packages[[i]])) {
+    if (dat$type == "local") {
       if (!file.exists(dat$path)) {
         stop(sprintf("Local package source '%s' does not exist", dat$path))
       }

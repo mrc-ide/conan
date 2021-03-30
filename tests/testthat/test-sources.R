@@ -24,3 +24,12 @@ test_that("conan_sources rewrites local references", {
   res <- conan_sources(c("abc", path, "xyz"))
   expect_equal(res$packages, c("abc", paste0("local::", path), "xyz"))
 })
+
+
+test_that("allow windows paths", {
+  path <- "C:\\file\\to\\package.tar.gz"
+  expect_error(
+    conan_sources(path),
+    "Local package source 'C:\\file\\to\\package.tar.gz' does not exist",
+    fixed = TRUE)
+})
