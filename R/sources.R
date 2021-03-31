@@ -24,7 +24,9 @@ conan_sources <- function(packages, repos = NULL, cran = NULL) {
       if (!file.exists(dat$path)) {
         stop(sprintf("Local package source '%s' does not exist", dat$path))
       }
-      packages[[i]] <- sprintf("local::%s", packages[[i]])
+      if (!grepl("^local::", packages[[i]])) {
+        packages[[i]] <- sprintf("local::%s", packages[[i]])
+      }
     }
   }
   ret <- list(packages = packages,
