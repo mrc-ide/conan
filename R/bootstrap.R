@@ -27,7 +27,10 @@ conan_bootstrap <- function(path, upgrade = FALSE) {
   prev <- .libPaths()
   on.exit(.libPaths(prev))
   .libPaths(path)
-  req <- c("docopt", "pkgcache", "pkgdepends")
+  ## TODO: I've empirically added R6, curl and jsonlite here, but I
+  ## think it's because they were already found in some system
+  ## library, but then others *were* found.
+  req <- c("R6", "curl", "docopt", "jsonlite", "pkgcache", "pkgdepends")
   if (!upgrade) {
     req <- missing_packages(req, path)
   }

@@ -2,6 +2,7 @@
 
 export(conan)
 export(conan_bootstrap)
+export(conan_check)
 export(conan_dryrun)
 export(conan_install)
 export(conan_install_plan)
