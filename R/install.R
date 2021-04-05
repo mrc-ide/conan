@@ -45,6 +45,7 @@ conan_install <- function(lib, packages, policy = "upgrade", repos = NULL,
 
   conan_bootstrap(path_bootstrap)
 
+  dir.create(lib, FALSE, TRUE)
   config <- list(library = lib)
 
   if (!is.null(path_cache)) {
