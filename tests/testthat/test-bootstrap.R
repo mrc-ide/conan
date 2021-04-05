@@ -13,13 +13,16 @@ test_that("Skip installed packages", {
 
   mockery::expect_called(mock_missing, 1)
   mockery::expect_called(mock_install, 2)
+  ## NOTE: see comments in the code; this list is longer than should
+  ## be required.
+  packages <- c("R6", "curl", "docopt", "jsonlite", "pkgcache", "pkgdepends")
   expect_equal(
     mockery::mock_args(mock_missing)[[1]],
-    list(c("docopt", "pkgcache", "pkgdepends"), path))
+    list(packages, path))
 
   expect_equal(
     mockery::mock_args(mock_install)[[1]],
-    list(c("docopt", "pkgcache", "pkgdepends"), path, default_cran()))
+    list(packages, path, default_cran()))
   expect_equal(
     mockery::mock_args(mock_install)[[2]],
     list("docopt", path, default_cran()))

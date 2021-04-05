@@ -114,8 +114,7 @@ test_that("Can run installation", {
   mock_pkgdepends <- mockery::mock(mock_obj)
   mock_bootstrap <- mockery::mock()
 
-  mockery::stub(conan_install, "pkgdepends::new_pkg_installation_proposal",
-                mock_pkgdepends)
+  mockery::stub(conan_install, "conan_proposal", mock_pkgdepends)
   mockery::stub(conan_install, "conan_bootstrap", mock_bootstrap)
 
   lib <- tempfile()
@@ -126,7 +125,7 @@ test_that("Can run installation", {
   mockery::expect_called(mock_pkgdepends, 1)
   expect_equal(
     mockery::mock_args(mock_pkgdepends)[[1]],
-    list(packages, list(library = lib), policy = "upgrade"))
+    list(packages, list(library = lib), "upgrade"))
   mockery::expect_called(mock_obj$solve, 1)
   mockery::expect_called(mock_obj$stop_for_solution_error, 1)
   mockery::expect_called(mock_obj$download, 1)
@@ -145,8 +144,7 @@ test_that("Can run installation with cache", {
   mock_pkgdepends <- mockery::mock(mock_obj)
   mock_bootstrap <- mockery::mock()
 
-  mockery::stub(conan_install, "pkgdepends::new_pkg_installation_proposal",
-                mock_pkgdepends)
+  mockery::stub(conan_install, "conan_proposal", mock_pkgdepends)
   mockery::stub(conan_install, "conan_bootstrap", mock_bootstrap)
 
   lib <- tempfile()
@@ -166,5 +164,17 @@ test_that("Can run installation with cache", {
     mockery::mock_args(mock_pkgdepends)[[1]],
     list(packages, list(library = lib,
                         package_cache_dir = file.path(cache, "pkg")),
-         policy = "upgrade"))
+         "upgrade"))
+})
+
+
+test_that("Can filter redundant packages", {
+  expect_equal(filter_packages(character(0)), character(0))
+  expect_equal(filter_packages("pkg"), "pkg")
+  expect_equal(filter_packages(c("pkg1", "pkg2")), c("pkg1", "pkg2"))
+  expect_equal(filter_packages(c("pkg1", "user/pkg1")), "user/pkg1")
+  expect_equal(filter_packages(c("pkg1", "pkg2", "user/pkg1")),
+               c("pkg2", "user/pkg1"))
+  expect_equal(filter_packages(c("pkg1", "pkg2", "user/pkg1", "user/pkg3")),
+               c("pkg2", "user/pkg1", "user/pkg3"))
 })

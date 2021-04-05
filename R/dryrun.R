@@ -24,8 +24,7 @@ conan_dryrun <- function(packages, policy = "upgrade", repos = NULL,
     lib,
     withr::with_options(
       c(repos = clean_repos(repos, cran)), {
-        proposal <- pkgdepends::new_pkg_installation_proposal(
-          packages, config, policy = policy)
+        proposal <- conan_proposal(packages, config, policy)
         proposal$solve()
         if (error) {
           proposal$stop_for_solution_error()

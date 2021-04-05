@@ -73,8 +73,7 @@ conan_install <- function(lib, packages, policy = "upgrade", repos = NULL,
   oo <- options(repos = repos)
   on.exit(options(oo), add = TRUE)
 
-  proposal <- pkgdepends::new_pkg_installation_proposal(
-    packages, config, policy = policy)
+  proposal <- conan_proposal(packages, config, policy)
   proposal$solve()
   proposal$stop_for_solution_error()
   proposal$download()
@@ -169,4 +168,19 @@ conan_path_bootstrap <- function(path) {
 
 conan_path_cache <- function(path) {
   conan_path(path, "CONAN_PATH_CACHE", NULL)
+}
+
+
+conan_proposal <- function(packages, config, policy) {
+  pkgdepends::new_pkg_installation_proposal(
+    filter_packages(packages), config, policy = policy)
+}
+
+
+filter_packages <- function(packages) {
+  refs <- pkgdepends::parse_pkg_refs(packages)
+  package_names <- vapply(refs, "[[", "", "package")
+  is_bare <- packages == package_names
+  drop <- is_bare & (packages %in% package_names[!is_bare])
+  packages[!drop]
 }
