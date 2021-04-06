@@ -27,6 +27,7 @@
 ##' @return The final status (`COMPLETE` or `ERROR`)
 ##'
 ##' @author Richard Fitzjohn
+##' @export
 conan_watch <- function(get_status, get_log, show_progress = TRUE,
                         show_log = TRUE, poll = 1, error = TRUE) {
   p <- conan_watch_progress(show_progress)
