@@ -17,3 +17,19 @@ test_that("clean repos fixes broken repos", {
   expect_equal(clean_repos("https://example.com"),
                c("https://example.com", CRAN = cran_rcloud))
 })
+
+
+
+test_that("throttle", {
+  a <- 0
+  f <- function(n) {
+    a <<- a + n
+  }
+  throttled <- throttle(0.01)
+  t1 <- Sys.time() + 0.1
+  while (Sys.time() < t1) {
+    throttled(f(1))
+  }
+  expect_lte(a, 11)
+  expect_gte(a, 5)
+})

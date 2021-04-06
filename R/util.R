@@ -67,3 +67,38 @@ write_script_exec <- function(code, path) {
 deparse_str <- function(x) {
   paste(deparse(x), collapse = "\n")
 }
+
+
+throttle <- function(interval) {
+  last <- Sys.time() - interval
+  function(expr) {
+    wait <- interval - (Sys.time() - last)
+    if (wait > 0) {
+      Sys.sleep(wait)
+    }
+    last <<- Sys.time()
+    force(expr)
+  }
+}
+
+
+new_log <- function(curr, prev) {
+  if (length(prev) == 0) {
+    curr
+  } else {
+    curr[-seq_along(prev)]
+  }
+}
+
+
+clear_progress_bar <- function(p) {
+  private <- environment(p$tick)$private
+  if (is.null(private)) {
+    return()
+  }
+  if (nchar(private$last_draw) > 0) {
+    str <- paste0(c("\r", rep(" ", private$width)), collapse = "")
+    message(str, appendLF = FALSE)
+  }
+  message("\r", appendLF = FALSE)
+}
