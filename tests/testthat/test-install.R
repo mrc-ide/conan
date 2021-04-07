@@ -1,51 +1,5 @@
 context("install")
 
-test_that("Can write basic plan", {
-  plan <- tempfile()
-  conan_write_plan(plan, c("x", "y", "z"))
-  expect_true(file.exists(plan))
-  expect_mapequal(
-    conan_read_plan(plan),
-    list(packages = c("x", "y", "z"),
-         repos = character(0),
-         policy = "upgrade"))
-})
-
-
-test_that("Can basic plan with extra repo", {
-  plan <- tempfile()
-  conan_write_plan(plan, c("x", "y", "z"), "https://mrc-ide.github.io/drat")
-  expect_true(file.exists(plan))
-  expect_mapequal(
-    conan_read_plan(plan),
-    list(packages = c("x", "y", "z"),
-         repos = "https://mrc-ide.github.io/drat",
-         policy = "upgrade"))
-})
-
-
-test_that("Can write fancy plan", {
-  plan <- tempfile()
-  repos <- c("https://mrc-ide.github.io/drat",
-             CRAN = "https://cran.example.com")
-  conan_write_plan(plan, c("x", "y", "z"), repos, "lazy")
-  expect_true(file.exists(plan))
-  expect_mapequal(
-    conan_read_plan(plan),
-    list(packages = c("x", "y", "z"),
-         repos = repos,
-         policy = "lazy"))
-})
-
-
-test_that("Error if plan not found", {
-  plan <- tempfile()
-  expect_error(
-    conan_read_plan(plan),
-    "File does not exist at '.+'")
-})
-
-
 test_that("Path handling", {
   bs <- tempfile()
   withr::with_envvar(
@@ -75,33 +29,6 @@ test_that("Path handling", {
       expect_equal(conan_path_cache("other"), "other")
     })
 })
-
-
-test_that("Can run an installation from a saved plan", {
-  plan <- tempfile()
-  conan_write_plan(plan, c("x", "y", "z"), "https://mrc-ide.github.io/drat")
-  lib <- tempfile()
-  path_bootstrap <- tempfile()
-  path_cache <- tempfile()
-
-  mock_install <- mockery::mock(cycle = TRUE)
-  mockery::stub(conan_install_plan, "conan_install", mock_install)
-
-  conan_install_plan(lib, plan)
-  conan_install_plan(lib, plan, path_bootstrap, path_cache)
-
-  mockery::expect_called(mock_install, 2)
-
-  expect_equal(
-    mockery::mock_args(mock_install)[[1]],
-    list(lib, c("x", "y", "z"), "upgrade", "https://mrc-ide.github.io/drat",
-         NULL, NULL))
-  expect_equal(
-    mockery::mock_args(mock_install)[[2]],
-    list(lib, c("x", "y", "z"), "upgrade", "https://mrc-ide.github.io/drat",
-         path_bootstrap, path_cache))
-})
-
 
 
 test_that("Can run installation", {

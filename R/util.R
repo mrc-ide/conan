@@ -52,11 +52,6 @@ default_cran <- function(cran = NULL) {
 }
 
 
-list_to_character <- function(x) {
-  vapply(x, identity, "", USE.NAMES = FALSE)
-}
-
-
 write_script_exec <- function(code, path) {
   writeLines(code, path)
   Sys.chmod(path, "755")

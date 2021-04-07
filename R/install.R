@@ -82,64 +82,6 @@ conan_install <- function(lib, packages, policy = "upgrade", repos = NULL,
 }
 
 
-##' Wrapper around [conan::conan_install()] which uses a small json
-##' file to describe how to proceed. This reduces the number of
-##' command line arguments that might need passing around.
-##'
-##' @title Create library from plan
-##'
-##' @inheritParams conan_install
-##'
-##' @param plan A plan file.
-##'
-##' @return Nothing, called for side effect of creating a library at
-##'   `lib`.
-##'
-##' @author Richard Fitzjohn
-##' @export
-conan_install_plan <- function(lib, plan,
-                               path_bootstrap = NULL, path_cache = NULL) {
-  dat <- conan_read_plan(plan)
-  conan_install(lib, dat$packages, dat$policy, dat$repos,
-                path_bootstrap, path_cache)
-}
-
-
-##' @rdname conan_install_plan
-##' @inheritParams conan_install
-##' @export
-conan_write_plan <- function(plan, packages, repos = NULL,
-                             policy = "upgrade") {
-  if (length(repos) == 0L) {
-    repos <- NULL
-  } else {
-    repos <- list(name = names(repos), value = unname(repos))
-  }
-  dat <- list(packages = packages,
-              repos = repos,
-              policy = jsonlite::unbox(policy))
-  writeLines(jsonlite::toJSON(dat, pretty = TRUE, null = "null"), plan)
-}
-
-
-conan_read_plan <- function(plan) {
-  if (!file.exists(plan)) {
-    stop(sprintf("File does not exist at '%s'", plan))
-  }
-  dat <- jsonlite::read_json(plan)
-  dat$packages <- list_to_character(dat$packages)
-
-  repos <- list_to_character(dat$repos$value)
-  if (length(dat$repos$name) > 0) {
-    names(repos) <- list_to_character(dat$repos$name)
-  }
-  dat$repos <- repos
-
-  dat$policy <- dat$policy[[1]]
-  dat
-}
-
-
 conan_path <- function(path, var, fallback = tempfile("conan_")) {
   if (!is.null(path)) {
     return(path)
