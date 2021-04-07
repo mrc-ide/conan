@@ -25,8 +25,8 @@ test_that("throttle", {
   f <- function(n) {
     a <<- a + n
   }
-  throttled <- throttle(0.01)
-  t1 <- Sys.time() + 0.1
+  throttled <- throttle(0.05)
+  t1 <- Sys.time() + 0.5
   while (Sys.time() < t1) {
     throttled(f(1))
   }
