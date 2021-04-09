@@ -18,11 +18,6 @@
 ##'   dir(path)
 ##' }
 conan_bootstrap <- function(path, upgrade = FALSE) {
-  message("CONAN THE LIBRARIAN I: the bootstrappening")
-  message(sprintf("Installing bootstrap library into '%s'", path))
-
-  ## TODO: We might try and load these packges?
-
   dir.create(path, FALSE, TRUE)
   prev <- .libPaths()
   on.exit(.libPaths(prev))
@@ -34,8 +29,16 @@ conan_bootstrap <- function(path, upgrade = FALSE) {
   if (!upgrade) {
     req <- missing_packages(req, path)
   }
-  install_packages(req, path, default_cran())
-  message("Success!")
+  if (length(req) > 0) {
+    prefix_message(
+      img_boots(), 1, "conan is bootstrapping...",
+      list("working" = getwd(),
+           "target" = path))
+    install_packages(req, path, default_cran())
+  }
+  for (i in req) {
+    loadNamespace(i, path)
+  }
   invisible(path)
 }
 

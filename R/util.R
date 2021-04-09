@@ -106,3 +106,69 @@ clear_progress_bar <- function(p) {
   }
   message("\r", appendLF = FALSE)
 }
+
+
+img_boots <- function() {
+  ## https://www.asciiart.eu/clothing-and-accessories/footwear
+  c("     ._......",
+    "     |X/.*| |",
+    "     |X/+ | |",
+    "     |X/* | |",
+    "____/     ; ;",
+    "\\_____/|_/_/")
+}
+
+
+img_axe <- function() {
+  ## https://www.asciiart.eu/weapons/axes
+  c("  ,:\\      /:.",
+    " //  \\_()_/  \\\\",
+    "||   |    |   ||",
+    "||   |    |   ||",
+    "||   |____|   ||",
+    " \\\\  / || \\  //",
+    "  `:/  ||  \\;'",
+    "       ||",
+    "       ||",
+    "       XX",
+    "       XX",
+    "       XX",
+    "       XX",
+    "       OO",
+    "       `'")
+}
+
+
+pad_right <- function(x) {
+  n <- nchar(x)
+  paste0(x, strrep(" ", max(n) - n))
+}
+
+
+prefix_message_build <- function(img, skip, title, data) {
+  txt <- vector("list", length(data))
+  lhs <- pad_right(paste0(names(data), ":"))
+  i <- vapply(data, is.list, TRUE)
+  if (any(i)) {
+    txt[i] <- Map(c,
+                  trimws(lhs[i]),
+                  lapply(unname(data[i]), function(x) paste("  *", x)))
+  }
+  txt[!i] <- paste(lhs[!i], vapply(data[!i], identity, "", USE.NAMES = FALSE))
+  txt <- unlist(c(list(title), txt))
+
+  npad_vertical <- 1 + max(0, length(txt) + skip - length(img))
+  ret <- pad_right(c(img, rep("", npad_vertical)))
+  i <- seq_along(txt) + skip
+  ret[i] <- paste(ret[i], txt, sep = "  ")
+  ret <- trimws(ret, "right")
+
+  ret
+}
+
+
+prefix_message <- function(img, skip, title, data) {
+  for (line in prefix_message_build(img, skip, title, data)) {
+    message(line)
+  }
+}

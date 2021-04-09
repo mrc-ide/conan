@@ -38,10 +38,10 @@ test_that("Can run installation", {
     download = mockery::mock(),
     stop_for_download_error = mockery::mock(),
     install = mockery::mock())
-  mock_pkgdepends <- mockery::mock(mock_obj)
+  mock_proposal <- mockery::mock(mock_obj)
   mock_bootstrap <- mockery::mock()
 
-  mockery::stub(conan_install, "conan_proposal", mock_pkgdepends)
+  mockery::stub(conan_install, "conan_proposal", mock_proposal)
   mockery::stub(conan_install, "conan_bootstrap", mock_bootstrap)
 
   lib <- tempfile()
@@ -49,9 +49,9 @@ test_that("Can run installation", {
   msg <- capture_messages(conan_install(lib, packages))
 
   mockery::expect_called(mock_bootstrap, 1)
-  mockery::expect_called(mock_pkgdepends, 1)
+  mockery::expect_called(mock_proposal, 1)
   expect_equal(
-    mockery::mock_args(mock_pkgdepends)[[1]],
+    mockery::mock_args(mock_proposal)[[1]],
     list(packages, list(library = lib), "upgrade"))
   mockery::expect_called(mock_obj$solve, 1)
   mockery::expect_called(mock_obj$stop_for_solution_error, 1)
@@ -68,10 +68,10 @@ test_that("Can run installation with cache", {
     download = mockery::mock(),
     stop_for_download_error = mockery::mock(),
     install = mockery::mock())
-  mock_pkgdepends <- mockery::mock(mock_obj)
+  mock_proposal <- mockery::mock(mock_obj)
   mock_bootstrap <- mockery::mock()
 
-  mockery::stub(conan_install, "conan_proposal", mock_pkgdepends)
+  mockery::stub(conan_install, "conan_proposal", mock_proposal)
   mockery::stub(conan_install, "conan_bootstrap", mock_bootstrap)
 
   lib <- tempfile()
@@ -86,9 +86,9 @@ test_that("Can run installation with cache", {
   expect_equal(
     mockery::mock_args(mock_bootstrap)[[1]],
     list(bootstrap))
-  mockery::expect_called(mock_pkgdepends, 1)
+  mockery::expect_called(mock_proposal, 1)
   expect_equal(
-    mockery::mock_args(mock_pkgdepends)[[1]],
+    mockery::mock_args(mock_proposal)[[1]],
     list(packages, list(library = lib,
                         package_cache_dir = file.path(cache, "pkg")),
          "upgrade"))

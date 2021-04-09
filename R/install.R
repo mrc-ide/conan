@@ -58,13 +58,14 @@ conan_install <- function(lib, packages, policy = "upgrade", repos = NULL,
 
   repos <- clean_repos(repos, cran)
 
-  message("CONAN THE LIBRARIAN")
-  message("Library:   ", lib)
-  message("Bootstrap: ", path_bootstrap)
-  message("Cache:     ", path_cache %||% "(unset)")
-  message("Policy:    ", policy)
-  message("Repos:\n", paste(sprintf(" * %s", repos), collapse = "\n"))
-  message("Packages:\n", paste(sprintf(" * %s", packages), collapse = "\n"))
+  prefix_message(
+    img_axe(), 2, "CONAN THE LIBRARIAN",
+    list("Library" = lib,
+         "Bootstrap" = path_bootstrap,
+         "Cache" = path_cache %||% "(unset)",
+         "Policy" = policy,
+         "Repos" = as.list(repos),
+         "Packages" = as.list(packages)))
 
   prev <- .libPaths()
   .libPaths(c(lib, path_bootstrap))

@@ -1,31 +1,72 @@
 context("bootstrap")
 
+test_that("upgrade installs all packages without checking", {
+  mock_missing <- mockery::mock()
+  mock_install <- mockery::mock()
+  mock_load_namespace <- mockery::mock()
+  mockery::stub(conan_bootstrap, "missing_packages", mock_missing)
+  mockery::stub(conan_bootstrap, "install_packages", mock_install)
+  mockery::stub(conan_bootstrap, "loadNamespace", mock_load_namespace)
+
+  path <- tempfile()
+  expect_message(
+    conan_bootstrap(path, TRUE),
+    "conan is bootstrapping...")
+
+  mockery::expect_called(mock_missing, 0)
+  mockery::expect_called(mock_install, 1)
+  packages <- c("R6", "curl", "docopt", "jsonlite", "pkgcache", "pkgdepends")
+  expect_equal(
+    mockery::mock_args(mock_install)[[1]],
+    list(packages, path, default_cran()))
+  mockery::expect_called(mock_load_namespace, length(packages))
+  expect_equal(
+    mockery::mock_args(mock_load_namespace),
+    Map(list, packages, path, USE.NAMES = FALSE))
+})
+
+
 test_that("Skip installed packages", {
   mock_missing <- mockery::mock("docopt")
-  mock_install <- mockery::mock(cycle = TRUE)
+  mock_install <- mockery::mock()
+  mock_load_namespace <- mockery::mock()
 
   mockery::stub(conan_bootstrap, "missing_packages", mock_missing)
   mockery::stub(conan_bootstrap, "install_packages", mock_install)
+  mockery::stub(conan_bootstrap, "loadNamespace", mock_load_namespace)
 
   path <- tempfile()
-  conan_bootstrap(path, TRUE)
-  conan_bootstrap(path, FALSE)
+  conan_bootstrap(path)
 
   mockery::expect_called(mock_missing, 1)
-  mockery::expect_called(mock_install, 2)
-  ## NOTE: see comments in the code; this list is longer than should
-  ## be required.
   packages <- c("R6", "curl", "docopt", "jsonlite", "pkgcache", "pkgdepends")
   expect_equal(
     mockery::mock_args(mock_missing)[[1]],
     list(packages, path))
-
   expect_equal(
     mockery::mock_args(mock_install)[[1]],
-    list(packages, path, default_cran()))
-  expect_equal(
-    mockery::mock_args(mock_install)[[2]],
     list("docopt", path, default_cran()))
+})
+
+
+test_that("Bootstrap is silent if nothing needs doing", {
+  mock_missing <- mockery::mock()
+  mock_install <- mockery::mock()
+  mock_load_namespace <- mockery::mock()
+
+  mockery::stub(conan_bootstrap, "missing_packages", mock_missing)
+  mockery::stub(conan_bootstrap, "install_packages", mock_install)
+  mockery::stub(conan_bootstrap, "loadNamespace", mock_load_namespace)
+
+  path <- tempfile()
+  expect_silent(conan_bootstrap(path))
+
+  mockery::expect_called(mock_missing, 1)
+  packages <- c("R6", "curl", "docopt", "jsonlite", "pkgcache", "pkgdepends")
+  expect_equal(
+    mockery::mock_args(mock_missing)[[1]],
+    list(packages, path))
+  mockery::expect_called(mock_install, 0)
 })
 
 
