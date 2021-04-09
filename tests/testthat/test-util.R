@@ -31,7 +31,7 @@ test_that("throttle", {
     throttled(f(1))
   }
   expect_lte(a, 11)
-  expect_gte(a, 5)
+  expect_gte(a, 2) # this is hard on the very slow mac runner
 })
 
 
