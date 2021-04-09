@@ -121,7 +121,7 @@ conan_proposal <- function(packages, config, policy) {
 
 filter_packages <- function(packages) {
   refs <- pkgdepends::parse_pkg_refs(packages)
-  package_names <- vapply(refs, "[[", "", "package")
+  package_names <- vapply(refs, ref_to_package_name, "", USE.NAMES = FALSE)
   is_bare <- packages == package_names
   drop <- is_bare & (packages %in% package_names[!is_bare])
   packages[!drop]

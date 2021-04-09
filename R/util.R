@@ -52,6 +52,15 @@ default_cran <- function(cran = NULL) {
 }
 
 
+ref_to_package_name <- function(ref) {
+  if (ref$type == "local") {
+    sub("(_.*)?\\.(tar.gz|tgz|zip)", "", basename(ref$path))
+  } else {
+    ref$package
+  }
+}
+
+
 write_script_exec <- function(code, path) {
   writeLines(code, path)
   Sys.chmod(path, "755")

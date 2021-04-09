@@ -33,3 +33,17 @@ test_that("throttle", {
   expect_lte(a, 11)
   expect_gte(a, 5)
 })
+
+
+test_that("Can extract package name", {
+  f <- function(x) {
+    ref_to_package_name(pkgdepends::parse_pkg_ref(x))
+  }
+  expect_equal(f("./pkg.tar.gz"), "pkg")
+  expect_equal(f("./pkg_0.1-2.tar.gz"), "pkg")
+  expect_equal(f("./pkg_0.1-2.tgz"), "pkg")
+  expect_equal(f("./pkg_0.1-2.zip"), "pkg")
+  expect_equal(f("local::pkg.tar.gz"), "pkg")
+  expect_equal(f("user/repo"), "repo")
+  expect_equal(f("std"), "std")
+})

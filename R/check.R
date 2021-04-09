@@ -24,7 +24,7 @@
 ##' conan::conan_check("github::org/unknownpkg", .libPaths())
 conan_check <- function(packages, library) {
   refs <- pkgdepends::parse_pkg_refs(packages)
-  pkgs <- vapply(refs, "[[", "", "package", USE.NAMES = FALSE)
+  pkgs <- vapply(refs, ref_to_package_name, "", USE.NAMES = FALSE)
   found <- sort(intersect(.packages(TRUE, library), pkgs))
   msg <- setdiff(pkgs, found)
   list(complete = length(msg) == 0,
