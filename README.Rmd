@@ -13,8 +13,7 @@
 
 To solve this problem, create a standalone script that can install its own dependencies and then install a required set of packages:
 
-
-```r
+```{r}
 conan::conan(
   "script",
   c("cpp11",
@@ -24,20 +23,9 @@ conan::conan(
 
 That will create a file like:
 
-```r
-#!/usr/bin/env Rscript
-`%||%` <- function (x, y)
-{
-    if (is.null(x))
-        y
-    else x
-[... skip ...]
-.dat <- parse_main_conan(name = "script")
-.packages <- c("cpp11", "mrc-ide/dust", "mrc-ide/mcstate@some-feature")
-.repos <- c(CRAN = "https://cloud.r-project.org")
-.policy <- "upgrade"
-.lib <- .dat$lib
-conan_install(.lib, .packages, policy = .policy, repos = .repos)
+```{r, results = "asis", echo = FALSE}
+txt <- readLines("script")
+writeLines(c("```r", head(txt), "[... skip ...]", tail(txt), "```"))
 ```
 
 Then this script can be run from the command line:
@@ -48,7 +36,9 @@ Then this script can be run from the command line:
 
 (or on Windows `Rscript script lib`), which will create a library at path `lib`
 
-
+```{r, include = FALSE}
+unlink("script")
+```
 
 ## Dependency resolution
 
