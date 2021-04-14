@@ -15,7 +15,7 @@ conan_dryrun(
 }
 \arguments{
 \item{packages}{A character vector of packages to install. These
-can be names of cran packages or github references etc; see
+can be names of CRAN packages or GitHub references etc; see
 \code{\link[pkgdepends:pkg_installation_proposal]{pkgdepends::new_pkg_installation_proposal()}} for more details}
 
 \item{policy}{Should be either "lazy" or "upgrade", with a default

@@ -19,7 +19,7 @@ conan_install(
 self-contained library at this address.}
 
 \item{packages}{A character vector of packages to install. These
-can be names of cran packages or github references etc; see
+can be names of CRAN packages or GitHub references etc; see
 \code{\link[pkgdepends:pkg_installation_proposal]{pkgdepends::new_pkg_installation_proposal()}} for more details}
 
 \item{policy}{Should be either "lazy" or "upgrade", with a default
@@ -51,7 +51,4 @@ Nothing, called for side effects of creating a library at
 }
 \description{
 Create a self-contained library, using pkgdepends.
-}
-\author{
-Richard Fitzjohn
 }

@@ -42,6 +42,3 @@ The final status (\code{COMPLETE} or \code{ERROR})
 Watch a conan installation from another process. This can be used
 to stream the status and progress back to the current R process.
 }
-\author{
-Richard Fitzjohn
-}

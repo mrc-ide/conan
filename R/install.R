@@ -3,7 +3,7 @@
 ##' @title Create a self-contained library
 ##'
 ##' @param packages A character vector of packages to install. These
-##'   can be names of cran packages or github references etc; see
+##'   can be names of CRAN packages or GitHub references etc; see
 ##'   [pkgdepends::new_pkg_installation_proposal()] for more details
 ##'
 ##' @param lib The path to install into. We will create a
@@ -36,7 +36,6 @@
 ##'   `lib`.
 ##'
 ##' @export
-##' @author Richard Fitzjohn
 conan_install <- function(lib, packages, policy = "upgrade", repos = NULL,
                           cran = NULL, path_bootstrap = NULL,
                           path_cache = NULL) {

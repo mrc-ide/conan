@@ -11,7 +11,7 @@
 
 `conan` provides a light wrapper around [`pkgdepends`](https://r-lib.github.io/pkgdepends/) in order to create standalone libraries. Our use case is creating libraries for use with HPC systems. It is not as broad or designed for interactive use like [`renv`](https://rstudio.github.io/renv/articles/renv.html), [`packrat`](https://rstudio.github.io/packrat/) or [`pak`](https://rstudio.github.io/packrat/). Instead it tries to address the narrow problem of "*how do you install packages from diverse sources without necessarily already having your package installer present?*".
 
-To solve this problem, create a standlone script that can install its own dependencies and then install a required set of packages:
+To solve this problem, create a standalone script that can install its own dependencies and then install a required set of packages:
 
 
 ```r
@@ -52,7 +52,7 @@ Then this script can be run from the command line:
 
 ## Dependency resolution
 
-All the dependency resolution is done by [`pkgdepends`](https://r-lib.github.io/pkgdepends/). Use of the Remotes field in DESCRIPTION can create impossible installation situations, beware. In particular, if a package is intalled from a cran-like repo and also via a `Remotes:` field in a package you are installing via a remotes-style reference, then you will get a "conflict" from pkgdepends.
+All the dependency resolution is done by [`pkgdepends`](https://r-lib.github.io/pkgdepends/). Use of the Remotes field in DESCRIPTION can create impossible installation situations, beware. In particular, if a package is installed from a CRAN-like repo and also via a `Remotes:` field in a package you are installing via a remotes-style reference, then you will get a "conflict" from pkgdepends.
 
 ## Installation
 
