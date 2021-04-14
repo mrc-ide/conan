@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • conan</title>
+<title>Dry run of package installation — conan_dryrun • conan</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,8 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Dry run of package installation — conan_dryrun" />
+<meta property="og:description" content="Dry run of package installation." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -66,7 +67,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -113,78 +114,80 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Dry run of package installation</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mrc-ide/conan/blob/master/R/dryrun.R'><code>R/dryrun.R</code></a></small>
+    <div class="hidden name"><code>conan_dryrun.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Dry run of package installation.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>conan_dryrun</span><span class='op'>(</span>
+  <span class='va'>packages</span>,
+  policy <span class='op'>=</span> <span class='st'>"upgrade"</span>,
+  repos <span class='op'>=</span> <span class='cn'>NULL</span>,
+  cran <span class='op'>=</span> <span class='cn'>NULL</span>,
+  lib <span class='op'>=</span> <span class='cn'>NULL</span>,
+  error <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="conan.html">conan()</a></code> </p>
-        </td>
-        <td><p>Conan the Librarian</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="conan_bootstrap.html">conan_bootstrap()</a></code> </p>
-        </td>
-        <td><p>Create a bootstrap library</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="conan_check.html">conan_check()</a></code> </p>
-        </td>
-        <td><p>Check if packages in library</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="conan_dryrun.html">conan_dryrun()</a></code> </p>
-        </td>
-        <td><p>Dry run of package installation</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="conan_install.html">conan_install()</a></code> </p>
-        </td>
-        <td><p>Create a self-contained library</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="conan_sources.html">conan_sources()</a></code> </p>
-        </td>
-        <td><p>Describe sources</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="conan_watch.html">conan_watch()</a></code> </p>
-        </td>
-        <td><p>Watch a conan installation</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>packages</th>
+      <td><p>A character vector of packages to install. These
+can be names of CRAN packages or GitHub references etc; see
+<code><a href='https://rdrr.io/pkg/pkgdepends/man/pkg_installation_proposal.html'>pkgdepends::new_pkg_installation_proposal()</a></code> for more details</p></td>
+    </tr>
+    <tr>
+      <th>policy</th>
+      <td><p>Should be either "lazy" or "upgrade", with a default
+of "upgrade"</p></td>
+    </tr>
+    <tr>
+      <th>repos</th>
+      <td><p>A character vector of repositories to use when
+installing. A suitable CRAN repo will be added if not detected
+(using the <code>cran</code> argument if provided)</p></td>
+    </tr>
+    <tr>
+      <th>cran</th>
+      <td><p>Fallback CRAN repo to use. If not given we will use
+<code>https://cloud.r-project.org</code></p></td>
+    </tr>
+    <tr>
+      <th>lib</th>
+      <td><p>The path to install into. We will create a
+self-contained library at this address.</p></td>
+    </tr>
+    <tr>
+      <th>error</th>
+      <td><p>Logical, indicating if error should be thrown on
+failure. If <code>FALSE</code> then we return the proposal object instead.</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Invisibly, the resolution</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>conan</span><span class='fu'>::</span><span class='fu'>conan_dryrun</span><span class='op'>(</span><span class='st'>"cpp11"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'><span style='color: #00BB00;'>✔</span><span> Updated metadata database: 4.45 MB in 12 files.</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BBBB;'>ℹ</span><span> Updating metadata database</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✔</span><span> Updating metadata database ... done</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; &lt;pkg_installation_proposal&gt;
+#&gt; + refs:
+#&gt;   - cpp11
+#&gt; + solution policy: upgrade
+#&gt; + has solution
+#&gt; (use `$download()` to download packages)
+#&gt; (use `$show_solution()` to see the packages to install
+#&gt; (use `$get_solution()` to see the full solution results)
+#&gt; (use `$draw()` to draw the dependency tree)
+#&gt; (use `$create_lockfile()` to write a lock file)</div></span></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>

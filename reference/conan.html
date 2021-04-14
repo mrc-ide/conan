@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • conan</title>
+<title>Conan the Librarian — conan • conan</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,11 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Conan the Librarian — conan" />
+<meta property="og:description" content="High-level conan interface. This function creates a standalone
+script that can provision a library at any location. The script
+has no dependencies and can be copied to another system and create
+a library given an empty R installation." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -66,7 +70,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -113,78 +117,85 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Conan the Librarian</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mrc-ide/conan/blob/master/R/conan.R'><code>R/conan.R</code></a></small>
+    <div class="hidden name"><code>conan.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>High-level conan interface. This function creates a standalone
+script that can provision a library at any location. The script
+has no dependencies and can be copied to another system and create
+a library given an empty R installation.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>conan</span><span class='op'>(</span>
+  <span class='va'>filename</span>,
+  <span class='va'>packages</span>,
+  repos <span class='op'>=</span> <span class='cn'>NULL</span>,
+  policy <span class='op'>=</span> <span class='st'>"upgrade"</span>,
+  cran <span class='op'>=</span> <span class='cn'>NULL</span>,
+  dryrun <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="conan.html">conan()</a></code> </p>
-        </td>
-        <td><p>Conan the Librarian</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="conan_bootstrap.html">conan_bootstrap()</a></code> </p>
-        </td>
-        <td><p>Create a bootstrap library</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="conan_check.html">conan_check()</a></code> </p>
-        </td>
-        <td><p>Check if packages in library</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="conan_dryrun.html">conan_dryrun()</a></code> </p>
-        </td>
-        <td><p>Dry run of package installation</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="conan_install.html">conan_install()</a></code> </p>
-        </td>
-        <td><p>Create a self-contained library</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="conan_sources.html">conan_sources()</a></code> </p>
-        </td>
-        <td><p>Describe sources</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="conan_watch.html">conan_watch()</a></code> </p>
-        </td>
-        <td><p>Watch a conan installation</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>filename</th>
+      <td><p>Path to write the install script to. Any directory
+components will be created as needed.</p></td>
+    </tr>
+    <tr>
+      <th>packages</th>
+      <td><p>A character vector of packages to install. These
+can be names of CRAN packages or GitHub references etc; see
+<code><a href='https://rdrr.io/pkg/pkgdepends/man/pkg_installation_proposal.html'>pkgdepends::new_pkg_installation_proposal()</a></code> for more details</p></td>
+    </tr>
+    <tr>
+      <th>repos</th>
+      <td><p>A character vector of repositories to use when
+installing. A suitable CRAN repo will be added if not detected
+(using the <code>cran</code> argument if provided)</p></td>
+    </tr>
+    <tr>
+      <th>policy</th>
+      <td><p>Should be either "lazy" or "upgrade", with a default
+of "upgrade"</p></td>
+    </tr>
+    <tr>
+      <th>cran</th>
+      <td><p>Fallback CRAN repo to use. If not given we will use
+<code>https://cloud.r-project.org</code></p></td>
+    </tr>
+    <tr>
+      <th>dryrun</th>
+      <td><p>Logical, indicating if we should try a dryrun with
+<code><a href='conan_dryrun.html'>conan_dryrun()</a></code>; if this passes your requested packages
+seem satisfiable.</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Invisibly, the path to the created script. This can be run
+via <code>Rscript</code> to create a standalone library. The script will
+require exactly one argument: the path to the library to
+create. It will respond to the environment variables
+<code>CONAN_PATH_BOOTSTRAP</code> and <code>CONAN_PATH_CACHE</code>.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='va'>path</span> <span class='op'>&lt;-</span> <span class='fu'>conan</span><span class='fu'>::</span><span class='fu'>conan</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"cpp11"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/writeLines.html'>writeLines</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>tail</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/readLines.html'>readLines</a></span><span class='op'>(</span><span class='va'>path</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; .dat &lt;- parse_main_conan(name = "file875512f1318")
+#&gt; .packages &lt;- "cpp11"
+#&gt; .repos &lt;- c(CRAN = "https://cloud.r-project.org")
+#&gt; .policy &lt;- "upgrade"
+#&gt; .lib &lt;- .dat$lib
+#&gt; conan_install(.lib, .packages, policy = .policy, repos = .repos)</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
