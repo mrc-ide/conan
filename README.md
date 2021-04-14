@@ -1,4 +1,4 @@
-# conan <img src=man/figures/logo.gif align="right" />
+# conan <img src=man/figures/logo.gif' align="right" />
 
 <!-- badges: start -->
 [![Project Status: Concept – Minimal or no implementation has been done yet, or the repository is only intended to be a limited example, demo, or proof-of-concept.](https://www.repostatus.org/badges/latest/concept.svg)](https://www.repostatus.org/#concept)
@@ -18,9 +18,8 @@ To solve this problem, create a standlone script that can install its own depend
 conan::conan(
   "script",
   c("cpp11",
-    "dust",
-    "mrc-ide/mcstate@some-feature"),
-  repos = "https://ncov-ic.github.io/drat")
+    "mrc-ide/dust",
+    "mrc-ide/mcstate@some-feature"))
 ```
 
 That will create a file like:
@@ -33,9 +32,9 @@ That will create a file like:
         y
     else x
 [... skip ...]
-.packages <- c("cpp11", "dust", "mrc-ide/mcstate@some-feature")
-.repos <- c("https://ncov-ic.github.io/drat", CRAN = "https://cloud.r-project.org"
-)
+.dat <- parse_main_conan(name = "script")
+.packages <- c("cpp11", "mrc-ide/dust", "mrc-ide/mcstate@some-feature")
+.repos <- c(CRAN = "https://cloud.r-project.org")
 .policy <- "upgrade"
 .lib <- .dat$lib
 conan_install(.lib, .packages, policy = .policy, repos = .repos)
@@ -47,13 +46,13 @@ Then this script can be run from the command line:
 ./script lib
 ```
 
-which will create a library at path `lib`
+(or on Windows `Rscript script lib`), which will create a library at path `lib`
 
 
 
 ## Dependency resolution
 
-All the dependency resolution is done by [`pkgdepends`](https://r-lib.github.io/pkgdepends/). Use of the Remotes field in DESCRIPTION can create impossible installation situations, beware.
+All the dependency resolution is done by [`pkgdepends`](https://r-lib.github.io/pkgdepends/). Use of the Remotes field in DESCRIPTION can create impossible installation situations, beware. In particular, if a package is intalled from a cran-like repo and also via a `Remotes:` field in a package you are installing via a remotes-style reference, then you will get a "conflict" from pkgdepends.
 
 ## Installation
 

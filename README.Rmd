@@ -17,9 +17,8 @@ To solve this problem, create a standlone script that can install its own depend
 conan::conan(
   "script",
   c("cpp11",
-    "dust",
-    "mrc-ide/mcstate@some-feature"),
-  repos = "https://ncov-ic.github.io/drat")
+    "mrc-ide/dust",
+    "mrc-ide/mcstate@some-feature"))
 ```
 
 That will create a file like:
@@ -35,7 +34,7 @@ Then this script can be run from the command line:
 ./script lib
 ```
 
-which will create a library at path `lib`
+(or on Windows `Rscript script lib`), which will create a library at path `lib`
 
 ```{r, include = FALSE}
 unlink("script")
@@ -43,7 +42,7 @@ unlink("script")
 
 ## Dependency resolution
 
-All the dependency resolution is done by [`pkgdepends`](https://r-lib.github.io/pkgdepends/). Use of the Remotes field in DESCRIPTION can create impossible installation situations, beware.
+All the dependency resolution is done by [`pkgdepends`](https://r-lib.github.io/pkgdepends/). Use of the Remotes field in DESCRIPTION can create impossible installation situations, beware. In particular, if a package is intalled from a cran-like repo and also via a `Remotes:` field in a package you are installing via a remotes-style reference, then you will get a "conflict" from pkgdepends.
 
 ## Installation
 
