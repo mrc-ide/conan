@@ -27,3 +27,14 @@ test_that("conan_check works with references mixed with packages", {
          found = character(0),
          missing = pkgs))
 })
+
+
+test_that("conan_check works with paths", {
+  path <- tempfile()
+  pkgs <- c("pkg1", "pkg2", "pkg3", "org/pkg2@ref", "local::pkg3.tgz")
+  expect_equal(
+    conan_check(pkgs, path),
+    list(complete = FALSE,
+         found = character(0),
+         missing = pkgs))
+})
