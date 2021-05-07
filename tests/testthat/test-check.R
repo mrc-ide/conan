@@ -14,7 +14,7 @@ test_that("conan_check works with references", {
     conan_check(c("cran::stats", "org/unknownpkg"), .libPaths()),
     list(complete = FALSE,
          found = "stats",
-         missing = "unknownpkg"))
+         missing = "org/unknownpkg"))
 })
 
 
