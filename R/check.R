@@ -26,8 +26,11 @@ conan_check <- function(packages, library) {
   refs <- pkgdepends::parse_pkg_refs(packages)
   pkgs <- vapply(refs, ref_to_package_name, "", USE.NAMES = FALSE)
   found <- sort(intersect(.packages(TRUE, library), pkgs))
-  msg <- setdiff(pkgs, found)
+
+  refs_target <- vapply(refs, ref_to_package_name, "")
+  msg <- packages[!(refs_target %in% found)]
+
   list(complete = length(msg) == 0,
        found = sort(found),
-       missing = sort(msg))
+       missing = msg)
 }

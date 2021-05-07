@@ -14,5 +14,27 @@ test_that("conan_check works with references", {
     conan_check(c("cran::stats", "org/unknownpkg"), .libPaths()),
     list(complete = FALSE,
          found = "stats",
-         missing = "unknownpkg"))
+         missing = "org/unknownpkg"))
+})
+
+
+test_that("conan_check works with references mixed with packages", {
+  path <- tempfile()
+  pkgs <- c("pkg1", "pkg2", "org/pkg2@ref")
+  expect_equal(
+    conan_check(pkgs, path),
+    list(complete = FALSE,
+         found = character(0),
+         missing = pkgs))
+})
+
+
+test_that("conan_check works with paths", {
+  path <- tempfile()
+  pkgs <- c("pkg1", "pkg2", "pkg3", "org/pkg2@ref", "local::pkg3.tgz")
+  expect_equal(
+    conan_check(pkgs, path),
+    list(complete = FALSE,
+         found = character(0),
+         missing = pkgs))
 })
