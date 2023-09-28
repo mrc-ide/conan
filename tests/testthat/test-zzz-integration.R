@@ -27,7 +27,7 @@ test_that("High level interface", {
 
   path <- conan(tempfile(),
                 c("cpp11", "dde"),
-                "https://mrc-ide.github.io/drat")
+                "https://mrc-ide.r-universe.dev")
   expect_true(file.exists(path))
 
   path_lib <- tempfile()
@@ -46,7 +46,7 @@ test_that("Watch a conan installation", {
 
   path <- conan(tempfile(),
                 c("cpp11", "dde"),
-                "https://mrc-ide.github.io/drat")
+                "https://mrc-ide.r-universe.dev")
   expect_true(file.exists(path))
 
   path_lib <- tempfile()
