@@ -58,10 +58,10 @@ test_that("Watch a conan installation", {
   ## There is no callr::rscript_bg so we need to do a bit of a faff
   ## here to simulate it.
   px <- callr::r_bg(
-    function(path, path_lib, path_log, env)
+    function(path, path_lib, path_log, env) {
       callr::rscript(c("--vanilla", path, path_lib),
-                     stdout = path_log, stderr = path_log, env = env),
-    list(path, path_lib, path_log, env))
+                     stdout = path_log, stderr = path_log, env = env)
+    }, list(path, path_lib, path_log, env))
 
   ## Assume can't fail for now
   get_status <- function() {
