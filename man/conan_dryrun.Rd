@@ -41,5 +41,7 @@ Invisibly, the resolution
 Dry run of package installation.
 }
 \examples{
+\dontshow{if (nzchar(Sys.getenv("R_USER_CACHE_DIR"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 conan::conan_dryrun("cpp11")
+\dontshow{\}) # examplesIf}
 }
