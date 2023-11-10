@@ -10,6 +10,7 @@
 ##' @return Invisibly, the resolution
 ##' @export
 ##' @examples
+##' @examplesIf nzchar(Sys.getenv("R_USER_CACHE_DIR"))
 ##' conan::conan_dryrun("cpp11")
 conan_dryrun <- function(packages, policy = "upgrade", repos = NULL,
                          cran = NULL, lib = NULL, error = TRUE) {
