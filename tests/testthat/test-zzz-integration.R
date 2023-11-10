@@ -36,7 +36,7 @@ test_that("High level interface", {
   callr::rscript(c("--vanilla", path, path_lib),
                  echo = TRUE, env = env)
 
-  expect_true(all(c("cpp11", "dde", "ring") %in% dir(path_lib)))
+  expect_true(all(c("cpp11", "dde") %in% dir(path_lib)))
 })
 
 
