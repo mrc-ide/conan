@@ -63,8 +63,15 @@ conan_configure <- function(method, ..., path_lib, path_bootstrap,
       "Unknown arguments in '...' for method '{method}': {collapseq(extra)}")
   }
 
+  assert_scalar_character(path_lib)
+  if (fs::is_absolute_path(path_lib)) {
+    cli::cli_abort(c(
+      "'path_lib' must be a relative path",
+      i = "We interpret 'path_lib' relative to 'path' ({path})"))
+  }
+
   args$method <- method
-  args$path_lib <- assert_scalar_character(path_lib)
+  args$path_lib <- path_lib
   args$path_bootstrap <- assert_scalar_character(path_bootstrap)
   args$delete_first <- assert_scalar_logical(delete_first)
   args$show_log <- assert_scalar_logical(show_log)
@@ -73,26 +80,6 @@ conan_configure <- function(method, ..., path_lib, path_bootstrap,
   class(args) <- "conan_config"
 
   args
-}
-
-
-##' Write a conan installation script
-##'
-##' @title Write conan installation script
-##'
-##' @param path The path to write to
-##'
-##' @param config Conan config, from [conan_configure()]
-##'
-##' @return Nothing
-##' @export
-conan_write <- function(config, path) {
-  assert_is(config, "conan_config")
-  template <- read_string(
-    conan_file(sprintf("template/install_%s.R", config$method)))
-  str <- glue_whisker(template, config)
-  dir.create(dirname(path), FALSE, TRUE)
-  writeLines(str, path)
 }
 
 

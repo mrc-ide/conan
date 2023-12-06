@@ -59,12 +59,11 @@ test_that("error if desired provisioning method unclear", {
 })
 
 
-test_that("can write out script based on configuration", {
+test_that("Require that path_lib is relative", {
   path <- withr::local_tempdir()
   file.create(file.path(path, "provision.R"))
-  cfg <- conan_configure(NULL, path = path, path_lib = "path/lib",
-                         path_bootstrap = "path/bootstrap")
-  dest <- file.path(path, "tmp", "script.R")
-  conan_write(cfg, dest)
-  expect_true(file.exists(dest))
+  expect_error(
+    conan_configure(NULL, path = path, path_lib = "/path/lib",
+                    path_bootstrap = "path/bootstrap"),
+    "'path_lib' must be a relative path")
 })
