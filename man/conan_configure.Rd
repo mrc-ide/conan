@@ -16,7 +16,8 @@ conan_configure(
 )
 }
 \arguments{
-\item{method}{The method to use; currently only "script" is supported.}
+\item{method}{The method to use; currently "script" and
+"pkgdepends" are supported.}
 
 \item{...}{Additional arguments, method specific. See Details.}
 
@@ -52,5 +53,9 @@ Different methods support different additional arguments:
 \itemize{
 \item method \code{script} supports the argument \code{script}, which is the
 name of the script to run, defaults to "provision.R"
+\item method \code{pkgdepends} supports the arguments \code{refs}, which can be
+a character vector of references (rather than reading from the
+file \code{pkgdepends.txt}) and \code{policy} which is passed through to
+\link[pkgdepends:pkg_installation_proposal]{pkgdepends::new_pkg_installation_proposal}.
 }
 }

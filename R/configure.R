@@ -5,10 +5,15 @@
 ##'
 ##' * method `script` supports the argument `script`, which is the
 ##'   name of the script to run, defaults to "provision.R"
+##' * method `pkgdepends` supports the arguments `refs`, which can be
+##'   a character vector of references (rather than reading from the
+##'   file `pkgdepends.txt`) and `policy` which is passed through to
+##'   [pkgdepends::new_pkg_installation_proposal].
 ##'
 ##' @title Configuration for conan
 ##'
-##' @param method The method to use; currently only "script" is supported.
+##' @param method The method to use; currently "script" and
+##'   "pkgdepends" are supported.
 ##'
 ##' @param ... Additional arguments, method specific. See Details.
 ##'
