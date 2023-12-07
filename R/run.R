@@ -11,6 +11,9 @@ conan_run <- function(config) {
   ## TODO: this *must* be called from the same directory passed
   ## through to conan_configure, which is weird.
   path <- tempfile(pattern = "conan")
+  ## If the integration tests fail, it will be useful to set this path
+  ## to something like: /home/rich/tmp/conan-testing (or some other
+  ## absolute path) so that the logs are not swallowed by the check.
   dir_create(path)
   path_script <- file.path(path, "conan.R")
   path_log <- file.path(path, "log")

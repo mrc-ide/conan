@@ -1,5 +1,4 @@
 test_that("can run a script-based installation", {
-  skip("ignore")
   path <- withr::local_tempdir()
   writeLines('install.packages("R6")', file.path(path, "provision.R"))
   path_lib <- "lib"
@@ -12,7 +11,6 @@ test_that("can run a script-based installation", {
 
 
 test_that("can run a pkgdepends-based installation", {
-  skip("ignore")
   path <- withr::local_tempdir()
   writeLines("R6", file.path(path, "pkgdepends.txt"))
   path_lib <- "lib"
