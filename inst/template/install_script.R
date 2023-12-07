@@ -17,7 +17,7 @@ local({
     unlink("{{path_lib}}", recursive = TRUE)
   }
 
-  dir.create("{{path_lib}}", FALSE, TRUE)
+  dir.create("{{path_lib}}", showWarnings = FALSE, recursive = TRUE)
   .libPaths(file.path(getwd(), "{{path_lib}}"))
 
   ## We need a CRAN mirror set or nothing works. The user is free to

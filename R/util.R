@@ -44,3 +44,8 @@ squote <- function(x) {
 collapseq <- function(x, last = NULL) {
   paste(squote(x), collapse = ", ")
 }
+
+
+dir_create <- function(path) {
+  dir.create(path, FALSE, TRUE)
+}

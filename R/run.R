@@ -11,7 +11,7 @@ conan_run <- function(config) {
   ## TODO: this *must* be called from the same directory passed
   ## through to conan_configure, which is weird.
   path <- tempfile(pattern = "conan")
-  dir.create(path, FALSE, TRUE)
+  dir_create(path)
   path_script <- file.path(path, "conan.R")
   path_log <- file.path(path, "log")
   conan_write(config, path_script)
@@ -36,6 +36,6 @@ conan_write <- function(config, path) {
   template <- read_string(
     conan_file(sprintf("template/install_%s.R", config$method)))
   str <- glue_whisker(template, config)
-  dir.create(dirname(path), FALSE, TRUE)
+  dir_create(dirname(path))
   writeLines(str, path)
 }
