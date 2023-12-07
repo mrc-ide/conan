@@ -1,0 +1,93 @@
+##' Configuration for running conan. Some common options and some
+##' specific to different provisioning methods.
+##'
+##' Different methods support different additional arguments:
+##'
+##' * method `script` supports the argument `script`, which is the
+##'   name of the script to run, defaults to "provision.R"
+##'
+##' @title Configuration for conan
+##'
+##' @param method The method to use; currently only "script" is supported.
+##'
+##' @param ... Additional arguments, method specific. See Details.
+##'
+##' @param path_lib The library to install into. Could be an absolute
+##'   or a relative path.
+##'
+##' @param path_bootstrap The path to a bootstrap library to use. This
+##'   needs to contain all the packages required for the method you
+##'   are using. For "script" this is just "remotes", but for
+##'   "pkgdepends" it'll be more.
+##'
+##' @param delete_first Should we delete the library before installing
+##'   into it?
+##'
+##' @param show_log Should we show the log as the installation runs?
+##'
+##' @param poll Polling interval for logs in seconds
+##'
+##' @param path Path to the root where you would run conan from;
+##'   typically this is the same path is the root of the project,
+##'   often as the working directory.
+##'
+##' @return A list with class `conan_config`. Do not modify
+##'   this object.
+##'
+##' @export
+conan_configure <- function(method, ..., path_lib, path_bootstrap,
+                            delete_first = FALSE, show_log = TRUE,
+                            poll = 1, path = ".") {
+  if (is.null(method)) {
+    method <- detect_method(path, call = environment())
+  }
+
+  args <- list(...)
+  assert_scalar_character(method)
+
+  if (method == "script") {
+    valid_args <- "script"
+    args$script <- args$script %||% "provision.R"
+    assert_scalar_character(args$script, "script", call = environment())
+    if (!file.exists(file.path(path, args$script))) {
+      cli::cli_abort(
+        "provision script '{args$script}' does not exist at path '{path}'")
+    }
+  } else {
+    cli::cli_abort("Unknown provision method '{method}'")
+  }
+
+  extra <- setdiff(names(args), valid_args)
+  if (length(extra) > 0) {
+    cli::cli_abort(
+      "Unknown arguments in '...' for method '{method}': {collapseq(extra)}")
+  }
+
+  assert_scalar_character(path_lib)
+  if (fs::is_absolute_path(path_lib)) {
+    cli::cli_abort(c(
+      "'path_lib' must be a relative path",
+      i = "We interpret 'path_lib' relative to 'path' ({path})"))
+  }
+
+  args$method <- method
+  args$path_lib <- path_lib
+  args$path_bootstrap <- assert_scalar_character(path_bootstrap)
+  args$delete_first <- assert_scalar_logical(delete_first)
+  args$show_log <- assert_scalar_logical(show_log)
+  args$poll <- assert_scalar_numeric(poll)
+
+  class(args) <- "conan_config"
+
+  args
+}
+
+
+detect_method <- function(path, call = NULL) {
+  if (file.exists(file.path(path, "provision.R"))) {
+    return("script")
+  } else {
+    cli::cli_abort("Could not detect provisioning method for path '{path}'",
+                   call = call)
+  }
+}
