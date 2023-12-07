@@ -67,3 +67,45 @@ test_that("Require that path_lib is relative", {
                     path_bootstrap = "path/bootstrap"),
     "'path_lib' must be a relative path")
 })
+
+
+test_that("can configure pkgdepends with character vector", {
+  cfg <- conan_configure("pkgdepends", refs = "foo", path_lib = "path/lib",
+                         path_bootstrap = "path/bootstrap")
+  expect_equal(cfg$method, "pkgdepends")
+  expect_equal(cfg$pkgdepends, list(repos = NULL, refs = "foo"))
+})
+
+
+test_that("can detect a pkgdepends installation", {
+  path <- withr::local_tempdir()
+  writeLines(c("repo::https://mrc-ide.r-universe.dev", "ids", "odin"),
+             file.path(path, "pkgdepends.txt"))
+  cfg <- conan_configure(NULL, path = path, path_lib = "path/lib",
+                         path_bootstrap = "path/bootstrap")
+  expect_equal(cfg$method, "pkgdepends")
+  expect_equal(cfg$pkgdepends,
+               list(repos = "https://mrc-ide.r-universe.dev",
+                    refs = c("ids", "odin")))
+  expect_equal(
+    conan_configure("pkgdepends", path = path, path_lib = "path/lib",
+                    path_bootstrap = "path/bootstrap"),
+    cfg)
+})
+
+
+test_that("require pkgdepends.txt to exist", {
+  path <- withr::local_tempdir()
+  expect_error(
+    conan_configure("pkgdepends", path = path, path_lib = "path/lib",
+                    path_bootstrap = "path/bootstrap"),
+    "Expected a file 'pkgdepends.txt' to exist at path")
+})
+
+
+test_that("prefer script over pkgdepends", {
+  path <- withr::local_tempdir()
+  file.create(file.path(path, "pkgdepends.txt"))
+  file.create(file.path(path, "provision.R"))
+  expect_equal(detect_method(path), "script")
+})

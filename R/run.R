@@ -35,7 +35,20 @@ conan_write <- function(config, path) {
   assert_is(config, "conan_config")
   template <- read_string(
     conan_file(sprintf("template/install_%s.R", config$method)))
-  str <- glue_whisker(template, config)
+  str <- glue_whisker(template, template_data(config))
   dir_create(dirname(path))
   writeLines(str, path)
+}
+
+
+template_data <- function(config) {
+  ret <- config
+  default_repo <- "https://cloud.r-project.org"
+  if (config$method == "script") {
+    ret$repos <- vector_to_str(default_repo)
+  } else if (config$method == "pkgdepends") {
+    ret$repos <- vector_to_str(c(config$pkgdepends$repos, default_repo))
+    ret$refs <- vector_to_str(config$pkgdepends$refs)
+  }
+  ret
 }

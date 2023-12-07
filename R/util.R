@@ -41,6 +41,15 @@ squote <- function(x) {
 }
 
 
+vector_to_str <- function(x) {
+  str <- paste(sprintf('"%s"', x), collapse = ", ")
+  if (length(x) > 1) {
+    str <- sprintf("c(%s)", str)
+  }
+  str
+}
+
+
 collapseq <- function(x, last = NULL) {
   paste(squote(x), collapse = ", ")
 }
@@ -48,4 +57,14 @@ collapseq <- function(x, last = NULL) {
 
 dir_create <- function(path) {
   dir.create(path, FALSE, TRUE)
+}
+
+
+vcapply <- function(...) {
+  vapply(..., FUN.VALUE = "")
+}
+
+
+vlapply <- function(...) {
+  vapply(..., FUN.VALUE = TRUE)
 }
