@@ -1,5 +1,4 @@
 test_that("can run an installation", {
-  testthat::skip_on_covr() # no idea why this fails...
   path <- withr::local_tempdir()
   writeLines('install.packages("R6")', file.path(path, "provision.R"))
   path_lib <- "lib"

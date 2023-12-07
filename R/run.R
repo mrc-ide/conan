@@ -11,6 +11,7 @@ conan_run <- function(config) {
   ## TODO: this *must* be called from the same directory passed
   ## through to conan_configure, which is weird.
   path <- tempfile(pattern = "conan")
+  path <- "/home/rich/tmp/conan/check"
   dir.create(path, FALSE, TRUE)
   path_script <- file.path(path, "conan.R")
   path_log <- file.path(path, "log")
