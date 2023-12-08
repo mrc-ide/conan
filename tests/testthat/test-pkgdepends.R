@@ -1,4 +1,4 @@
-test_that("can parse pkgdown lists", {
+test_that("can parse pkgdepends lists", {
   expect_equal(
     pkgdepends_parse(character()),
     list(repos = NULL, refs = character()))

@@ -60,7 +60,7 @@ conan_configure <- function(method, ..., path_lib, path_bootstrap,
     }
   } else if (method == "pkgdepends") {
     valid_args <- c("refs", "policy")
-    args$policy <- args$policy <- "lazy"
+    args$policy <- args$policy %||% "lazy"
     if (!is.null(args$refs)) {
       assert_scalar_character(args$refs, "refs", call = environment())
     }

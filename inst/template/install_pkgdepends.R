@@ -35,6 +35,7 @@ proposal <- pkgdepends::new_pkg_installation_proposal(
   policy = "{{policy}}")
 proposal$solve()
 proposal$stop_for_solution_error()
+proposal$show_solution()
 proposal$download()
 proposal$stop_for_download_error()
 proposal$install()
