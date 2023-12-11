@@ -25,6 +25,12 @@
 ##'   are using. For "script" this is just "remotes", but for
 ##'   "pkgdepends" it'll be more.
 ##'
+##' @param environment A list with components `packages` and `sources`
+##'   to be used to attempt to work out what packages should be
+##'   installed; only used when no explicit provisioning approach is
+##'   used.  See hermod "packages and provisioning" vignette for
+##'   details.
+##'
 ##' @param delete_first Should we delete the library before installing
 ##'   into it?
 ##'
@@ -44,7 +50,7 @@ conan_configure <- function(method, ..., path_lib, path_bootstrap,
                             delete_first = FALSE, show_log = TRUE,
                             poll = 1, path = ".") {
   if (is.null(method)) {
-    method <- detect_method(path, call = environment())
+    method <- detect_method(path, call = rlang::current_env())
   }
 
   args <- list(...)
@@ -65,6 +71,8 @@ conan_configure <- function(method, ..., path_lib, path_bootstrap,
       assert_scalar_character(args$refs, "refs", call = environment())
     }
     assert_scalar_character(args$policy, "policy", call = environment())
+  } else if (method == "auto") {
+    valid_args <- "environment" # consider changing this name perhaps?
   } else {
     cli::cli_abort("Unknown provision method '{method}'")
   }
@@ -94,6 +102,8 @@ conan_configure <- function(method, ..., path_lib, path_bootstrap,
       refs <- args$refs
     }
     args$pkgdepends <- pkgdepends_parse(refs)
+  } else if (method == "auto") {
+    args$pkgdepends <- build_pkgdepends_auto(args$environment, path)
   }
 
   args$method <- method
@@ -111,11 +121,10 @@ conan_configure <- function(method, ..., path_lib, path_bootstrap,
 
 detect_method <- function(path, call = NULL) {
   if (file.exists(file.path(path, "provision.R"))) {
-    return("script")
+    "script"
   } else if (file.exists(file.path(path, "pkgdepends.txt"))) {
-    return("pkgdepends")
+    "pkgdepends"
   } else {
-    cli::cli_abort("Could not detect provisioning method for path '{path}'",
-                   call = call)
+    "auto"
   }
 }

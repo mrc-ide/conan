@@ -49,7 +49,7 @@ template_data <- function(config) {
   default_repo <- "https://cloud.r-project.org"
   if (config$method == "script") {
     ret$repos <- vector_to_str(default_repo)
-  } else if (config$method == "pkgdepends") {
+  } else if (config$method %in% c("pkgdepends", "auto")) {
     ret$repos <- vector_to_str(c(config$pkgdepends$repos, default_repo))
     ret$refs <- vector_to_str(config$pkgdepends$refs)
   }

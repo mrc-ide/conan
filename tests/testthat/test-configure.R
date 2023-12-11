@@ -55,7 +55,7 @@ test_that("error if desired provisioning method unclear", {
   expect_error(
     conan_configure(NULL, path = path, path_lib = "path/lib",
                     path_bootstrap = "path/bootstrap"),
-    "Could not detect provisioning method for path")
+    "I could work out anything to install automatically")
 })
 
 
@@ -108,4 +108,26 @@ test_that("prefer script over pkgdepends", {
   file.create(file.path(path, "pkgdepends.txt"))
   file.create(file.path(path, "provision.R"))
   expect_equal(detect_method(path), "script")
+})
+
+
+test_that("prefer script over pkgdepends", {
+  path <- withr::local_tempdir()
+  expect_equal(detect_method(path), "auto")
+})
+
+
+test_that("can fall back on automatic installation", {
+  path <- withr::local_tempdir()
+  env <- list(packages = c("apple", "banana"))
+  cfg <- conan_configure(NULL, path = path, path_lib = "path/lib",
+                         path_bootstrap = "path/bootstrap",
+                         environment = env)
+  expect_equal(cfg$method, "auto")
+  expect_mapequal(cfg$pkgdepends,
+                  list(repos = character(), refs = c("apple", "banana")))
+  expect_equal(
+    conan_configure("auto", path = path, path_lib = "path/lib",
+                    path_bootstrap = "path/bootstrap", environment = env),
+    cfg)
 })

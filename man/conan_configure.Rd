@@ -39,6 +39,12 @@ into it?}
 \item{path}{Path to the root where you would run conan from;
 typically this is the same path is the root of the project,
 often as the working directory.}
+
+\item{environment}{A list with components \code{packages} and \code{sources}
+to be used to attempt to work out what packages should be
+installed; only used when no explicit provisioning approach is
+used.  See hermod "packages and provisioning" vignette for
+details.}
 }
 \value{
 A list with class \code{conan_config}. Do not modify
