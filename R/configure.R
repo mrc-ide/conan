@@ -5,10 +5,15 @@
 ##'
 ##' * method `script` supports the argument `script`, which is the
 ##'   name of the script to run, defaults to "provision.R"
+##' * method `pkgdepends` supports the arguments `refs`, which can be
+##'   a character vector of references (rather than reading from the
+##'   file `pkgdepends.txt`) and `policy` which is passed through to
+##'   [pkgdepends::new_pkg_installation_proposal].
 ##'
 ##' @title Configuration for conan
 ##'
-##' @param method The method to use; currently only "script" is supported.
+##' @param method The method to use; currently "script" and
+##'   "pkgdepends" are supported.
 ##'
 ##' @param ... Additional arguments, method specific. See Details.
 ##'
@@ -53,6 +58,13 @@ conan_configure <- function(method, ..., path_lib, path_bootstrap,
       cli::cli_abort(
         "provision script '{args$script}' does not exist at path '{path}'")
     }
+  } else if (method == "pkgdepends") {
+    valid_args <- c("refs", "policy")
+    args$policy <- args$policy %||% "lazy"
+    if (!is.null(args$refs)) {
+      assert_scalar_character(args$refs, "refs", call = environment())
+    }
+    assert_scalar_character(args$policy, "policy", call = environment())
   } else {
     cli::cli_abort("Unknown provision method '{method}'")
   }
@@ -68,6 +80,20 @@ conan_configure <- function(method, ..., path_lib, path_bootstrap,
     cli::cli_abort(c(
       "'path_lib' must be a relative path",
       i = "We interpret 'path_lib' relative to 'path' ({path})"))
+  }
+
+  if (method == "pkgdepends") {
+    if (is.null(args$refs)) {
+      path_pkgdepends <- file.path(path, "pkgdepends.txt")
+      if (!file.exists(path_pkgdepends)) {
+        cli::cli_abort(
+          "Expected a file 'pkgdepends.txt' to exist at path '{path}'")
+      }
+      refs <- readLines(path_pkgdepends)
+    } else {
+      refs <- args$refs
+    }
+    args$pkgdepends <- pkgdepends_parse(refs)
   }
 
   args$method <- method
@@ -86,6 +112,8 @@ conan_configure <- function(method, ..., path_lib, path_bootstrap,
 detect_method <- function(path, call = NULL) {
   if (file.exists(file.path(path, "provision.R"))) {
     return("script")
+  } else if (file.exists(file.path(path, "pkgdepends.txt"))) {
+    return("pkgdepends")
   } else {
     cli::cli_abort("Could not detect provisioning method for path '{path}'",
                    call = call)

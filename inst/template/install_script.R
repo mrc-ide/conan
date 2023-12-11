@@ -25,7 +25,7 @@ local({
   ## We need a CRAN mirror set or nothing works. The user is free to
   ## replace this with something else if they want within their script,
   ## but this saves every script needing one.
-  options(repos = c(CRAN = "https://cloud.r-project.org"))
+  options(repos = {{repos}})
 })
 
 message("Logs from your installation script '{{script}}' follow:")

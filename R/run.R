@@ -11,6 +11,9 @@ conan_run <- function(config) {
   ## TODO: this *must* be called from the same directory passed
   ## through to conan_configure, which is weird.
   path <- tempfile(pattern = "conan")
+  ## If the integration tests fail, it will be useful to set this path
+  ## to something like: /home/rich/tmp/conan-testing (or some other
+  ## absolute path) so that the logs are not swallowed by the check.
   dir_create(path)
   path_script <- file.path(path, "conan.R")
   path_log <- file.path(path, "log")
@@ -35,7 +38,20 @@ conan_write <- function(config, path) {
   assert_is(config, "conan_config")
   template <- read_string(
     conan_file(sprintf("template/install_%s.R", config$method)))
-  str <- glue_whisker(template, config)
+  str <- glue_whisker(template, template_data(config))
   dir_create(dirname(path))
   writeLines(str, path)
+}
+
+
+template_data <- function(config) {
+  ret <- config
+  default_repo <- "https://cloud.r-project.org"
+  if (config$method == "script") {
+    ret$repos <- vector_to_str(default_repo)
+  } else if (config$method == "pkgdepends") {
+    ret$repos <- vector_to_str(c(config$pkgdepends$repos, default_repo))
+    ret$refs <- vector_to_str(config$pkgdepends$refs)
+  }
+  ret
 }

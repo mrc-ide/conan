@@ -20,6 +20,7 @@ Imports:
 Suggests:
     callr,
     mockery,
+    pkgdepends,
     remotes,
     testthat,
     withr

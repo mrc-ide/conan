@@ -19,3 +19,9 @@ test_that("throttle", {
   expect_lte(a, 11)
   expect_gte(a, 2) # this is hard on the very slow mac runner
 })
+
+
+test_that("can convert a vector to string representation", {
+  expect_equal(vector_to_str("x"), '"x"')
+  expect_equal(vector_to_str(c("x", "y")), 'c("x", "y")')
+})

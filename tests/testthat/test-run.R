@@ -6,6 +6,26 @@ test_that("can write out script based on configuration", {
   dest <- file.path(path, "tmp", "script.R")
   conan_write(cfg, dest)
   expect_true(file.exists(dest))
+
+  dat <- template_data(cfg)
+  expect_equal(setdiff(names(dat), names(cfg)), "repos")
+  expect_equal(dat$repos, vector_to_str("https://cloud.r-project.org"))
+})
+
+
+test_that("can write out pkgdepends script based on configuration", {
+  path <- withr::local_tempdir()
+  writeLines("foo", file.path(path, "pkgdepends.txt"))
+  cfg <- conan_configure(NULL, path = path, path_lib = "path/lib",
+                         path_bootstrap = "path/bootstrap")
+  dest <- file.path(path, "tmp", "script.R")
+  conan_write(cfg, dest)
+  expect_true(file.exists(dest))
+
+  dat <- template_data(cfg)
+  expect_equal(setdiff(names(dat), names(cfg)), c("repos", "refs"))
+  expect_equal(dat$repos, vector_to_str("https://cloud.r-project.org"))
+  expect_equal(dat$refs, vector_to_str("foo"))
 })
 
 
