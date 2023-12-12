@@ -20,3 +20,17 @@ test_that("can run a pkgdepends-based installation", {
   withr::with_dir(path, conan_run(cfg))
   expect_true(file.exists(file.path(path, "lib", "R6")))
 })
+
+
+test_that("can run an automatic installation", {
+  path <- withr::local_tempdir()
+  environment <- list(packages = "R6")
+  path_lib <- "lib"
+  path_bootstrap <- bootstrap_library("pkgdepends")
+  cfg <- conan_configure(NULL, path = path, path_lib = path_lib,
+                         path_bootstrap = path_bootstrap,
+                         environment = environment,
+                         show_log = FALSE)
+  withr::with_dir(path, conan_run(cfg))
+  expect_true(file.exists(file.path(path, "lib", "R6")))
+})
