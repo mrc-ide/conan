@@ -1,4 +1,4 @@
 library(testthat)
-library(conan)
+library(conan2)
 
-test_check("conan")
+test_check("conan2")
