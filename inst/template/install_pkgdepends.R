@@ -2,10 +2,12 @@ local({
   message("Bootstrapping from: {{path_bootstrap}}")
   message("Installing into library: {{path_lib}}")
   message(sprintf("Running in path: %s", getwd()))
-  message("Library paths:")
-  message(paste(sprintf("  - %s", .libPaths()), collapse = "\n"))
 
-  preload <- c("pkgdepends", "pkgcache", "withr")
+  ## TODO: we can work this out from pkgdepends and have it tell us;
+  ## all its (recursive) hard dependencies)
+  preload <- c("ps", "cli", "curl", "filelock", "pkgdepends", "pkgcache",
+               "processx", "lpSolve", "jsonlite", "withr", "desc", "zip",
+               "pkgbuild", "callr")
   for (pkg in preload) {
     if (!requireNamespace(pkg, "{{path_bootstrap}}")) {
       stop(sprintf("Failed to load '%s' from the bootstrap library", pkg))
@@ -21,6 +23,9 @@ local({
 
   dir.create("{{path_lib}}", showWarnings = FALSE, recursive = TRUE)
   .libPaths(file.path(getwd(), "{{path_lib}}"))
+
+  message("Library paths:")
+  message(paste(sprintf("  - %s", .libPaths()), collapse = "\n"))
 
   options(repos = {{repos}})
 })

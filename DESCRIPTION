@@ -16,7 +16,8 @@ BugReports: https://github.com/mrc-ide/conan/issues
 Imports:
     cli,
     fs,
-    glue
+    glue,
+    rlang
 Suggests:
     callr,
     mockery,

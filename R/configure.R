@@ -44,7 +44,7 @@ conan_configure <- function(method, ..., path_lib, path_bootstrap,
                             delete_first = FALSE, show_log = TRUE,
                             poll = 1, path = ".") {
   if (is.null(method)) {
-    method <- detect_method(path, call = environment())
+    method <- detect_method(path, call = rlang::current_env())
   }
 
   args <- list(...)
@@ -53,7 +53,7 @@ conan_configure <- function(method, ..., path_lib, path_bootstrap,
   if (method == "script") {
     valid_args <- "script"
     args$script <- args$script %||% "provision.R"
-    assert_scalar_character(args$script, "script", call = environment())
+    assert_scalar_character(args$script, "script", call = rlang::current_env())
     if (!file.exists(file.path(path, args$script))) {
       cli::cli_abort(
         "provision script '{args$script}' does not exist at path '{path}'")
@@ -62,14 +62,16 @@ conan_configure <- function(method, ..., path_lib, path_bootstrap,
     valid_args <- c("refs", "policy")
     args$policy <- args$policy %||% "lazy"
     if (!is.null(args$refs)) {
-      assert_scalar_character(args$refs, "refs", call = environment())
+      assert_scalar_character(args$refs, "refs", call = rlang::current_env())
     }
-    assert_scalar_character(args$policy, "policy", call = environment())
+    assert_scalar_character(args$policy, "policy", call = rlang::current_env())
+  } else if (method == "auto") {
+    valid_args <- NULL
   } else {
     cli::cli_abort("Unknown provision method '{method}'")
   }
 
-  extra <- setdiff(names(args), valid_args)
+  extra <- setdiff(names(args), c("environment", valid_args))
   if (length(extra) > 0) {
     cli::cli_abort(
       "Unknown arguments in '...' for method '{method}': {collapseq(extra)}")
@@ -94,6 +96,9 @@ conan_configure <- function(method, ..., path_lib, path_bootstrap,
       refs <- args$refs
     }
     args$pkgdepends <- pkgdepends_parse(refs)
+  } else if (method == "auto") {
+    args$pkgdepends <- build_pkgdepends_auto(args$environment, path)
+    args$policy <- "lazy" # always lazy
   }
 
   args$method <- method
@@ -111,11 +116,10 @@ conan_configure <- function(method, ..., path_lib, path_bootstrap,
 
 detect_method <- function(path, call = NULL) {
   if (file.exists(file.path(path, "provision.R"))) {
-    return("script")
+    "script"
   } else if (file.exists(file.path(path, "pkgdepends.txt"))) {
-    return("pkgdepends")
+    "pkgdepends"
   } else {
-    cli::cli_abort("Could not detect provisioning method for path '{path}'",
-                   call = call)
+    "auto"
   }
 }
