@@ -22,6 +22,9 @@ local({
   dir.create("{{path_lib}}", showWarnings = FALSE, recursive = TRUE)
   .libPaths(file.path(getwd(), "{{path_lib}}"))
 
+  message("Library paths:")
+  message(paste(sprintf("  - %s", .libPaths()), collapse = "\n"))
+
   ## We need a CRAN mirror set or nothing works. The user is free to
   ## replace this with something else if they want within their script,
   ## but this saves every script needing one.

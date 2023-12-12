@@ -72,12 +72,12 @@ conan_configure <- function(method, ..., path_lib, path_bootstrap,
     }
     assert_scalar_character(args$policy, "policy", call = environment())
   } else if (method == "auto") {
-    valid_args <- "environment" # consider changing this name perhaps?
+    valid_args <- NULL
   } else {
     cli::cli_abort("Unknown provision method '{method}'")
   }
 
-  extra <- setdiff(names(args), valid_args)
+  extra <- setdiff(names(args), c("environment", valid_args))
   if (length(extra) > 0) {
     cli::cli_abort(
       "Unknown arguments in '...' for method '{method}': {collapseq(extra)}")
@@ -104,6 +104,7 @@ conan_configure <- function(method, ..., path_lib, path_bootstrap,
     args$pkgdepends <- pkgdepends_parse(refs)
   } else if (method == "auto") {
     args$pkgdepends <- build_pkgdepends_auto(args$environment, path)
+    args$policy <- "lazy" # always lazy
   }
 
   args$method <- method
