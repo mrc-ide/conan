@@ -25,12 +25,6 @@
 ##'   are using. For "script" this is just "remotes", but for
 ##'   "pkgdepends" it'll be more.
 ##'
-##' @param environment A list with components `packages` and `sources`
-##'   to be used to attempt to work out what packages should be
-##'   installed; only used when no explicit provisioning approach is
-##'   used.  See hermod "packages and provisioning" vignette for
-##'   details.
-##'
 ##' @param delete_first Should we delete the library before installing
 ##'   into it?
 ##'
@@ -59,7 +53,7 @@ conan_configure <- function(method, ..., path_lib, path_bootstrap,
   if (method == "script") {
     valid_args <- "script"
     args$script <- args$script %||% "provision.R"
-    assert_scalar_character(args$script, "script", call = environment())
+    assert_scalar_character(args$script, "script", call = rlang::current_env())
     if (!file.exists(file.path(path, args$script))) {
       cli::cli_abort(
         "provision script '{args$script}' does not exist at path '{path}'")
@@ -68,9 +62,9 @@ conan_configure <- function(method, ..., path_lib, path_bootstrap,
     valid_args <- c("refs", "policy")
     args$policy <- args$policy %||% "lazy"
     if (!is.null(args$refs)) {
-      assert_scalar_character(args$refs, "refs", call = environment())
+      assert_scalar_character(args$refs, "refs", call = rlang::current_env())
     }
-    assert_scalar_character(args$policy, "policy", call = environment())
+    assert_scalar_character(args$policy, "policy", call = rlang::current_env())
   } else if (method == "auto") {
     valid_args <- NULL
   } else {
