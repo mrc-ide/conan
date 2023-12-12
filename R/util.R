@@ -14,7 +14,7 @@ glue_whisker <- function(template, data) {
 
 
 conan_file <- function(path) {
-  system.file(path, package = "conan", mustWork = TRUE)
+  system.file(path, package = "conan2", mustWork = TRUE)
 }
 
 
