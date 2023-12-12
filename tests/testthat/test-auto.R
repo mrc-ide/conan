@@ -32,6 +32,25 @@ test_that("can find dependencies in source files", {
 })
 
 
+test_that("can fall back on package name if ref construction fails", {
+  desc <- function(...) {
+    structure(list(...), class = "packageDescription")
+  }
+  mock_pkg_desc <- mockery::mock(
+    desc(RemoteRef = "HEAD", RemoteRepo = "repo-c"))
+  mockery::stub(packages_to_pkgdepends, "utils::packageDescription",
+                mock_pkg_desc)
+  warn <- expect_warning(
+    res <- packages_to_pkgdepends("x"),
+    "Failed to work out pkgdepends ref for 'x'")
+  expect_match(msg, "Failed to work out pkgdepends ref for 'x'")
+  expect_mapequal(res, list(repos = character(), refs = "x"))
+  mockery::expect_called(mock_pkg_desc, 1)
+  expect_equal(mockery::mock_args(mock_pkg_desc),
+               list(list("x")))
+})
+
+
 test_that("can detect complex refs", {
   desc <- function(...) {
     structure(list(...), class = "packageDescription")

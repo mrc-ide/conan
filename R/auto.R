@@ -38,6 +38,16 @@ packages_to_pkgdepends <- function(packages) {
       if (!is.null(desc$RemoteSubdir)) {
         ref <- sprintf("%s/%s", ref, desc$RemoteSubdir)
       }
+      if (length(ref) == 0) {
+        cli::cli_warn(
+          c("Failed to work out pkgdepends ref for '{p}'",
+            i = "RemoteUsername: {desc$RemoteUsername %||% 'NULL'}",
+            i = "RemoteRepo: {desc$RemoteRepo %||% 'NULL'}",
+            i = "RemoteRef: {desc$RemoteRef %||% 'NULL'}",
+            i = "RemoteSubdir: {desc$RemoteSubdir %||% 'NULL'}",
+            i = "If you see this warning, please let us know!"))
+        ref <- p
+      }
       refs[[i]] <- ref
     }
   }
