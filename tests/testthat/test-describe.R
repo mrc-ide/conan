@@ -11,7 +11,7 @@ test_that("can parse package sources", {
   expect_equal(package_source(bioconductor), c("Bioconductor", NA))
 
   local <- list(
-    Package = "conan2")
+    Package = "conan")
   expect_equal(package_source(local), c("local", NA))
 
   universe <- list(
