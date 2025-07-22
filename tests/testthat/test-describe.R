@@ -36,7 +36,7 @@ test_that("can parse package sources", {
   expect_equal(package_source(gh), c("github", "richfitz/rfiglet (d713c1b)"))
 
   ## Real install with
-  ## pak::pkg_install("mrc-ide/hipercow/drivers/windows@mrc-4796")
+  ## > pak::pkg_install("mrc-ide/hipercow/drivers/windows@mrc-4796")
   insubdir <- list(
     Package = "hipercow.windows",
     RemoteType = "github",
