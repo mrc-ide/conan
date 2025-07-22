@@ -1,5 +1,3 @@
-context("util")
-
 test_that("null-or-value works", {
   expect_equal(1 %||% NULL, 1)
   expect_equal(1 %||% 2, 1)
@@ -8,42 +6,32 @@ test_that("null-or-value works", {
 })
 
 
-test_that("clean repos fixes broken repos", {
-  cran_rcloud <- "https://cloud.r-project.org"
-  expect_equal(clean_repos(NULL), c(CRAN = cran_rcloud))
-  expect_equal(clean_repos(c(CRAN = "@CRAN@")), c(CRAN = cran_rcloud))
-  expect_equal(clean_repos(c(CRAN = "https://cran.example.com")),
-               c(CRAN = "https://cran.example.com"))
-  expect_equal(clean_repos("https://example.com"),
-               c("https://example.com", CRAN = cran_rcloud))
+test_that("can convert a vector to string representation", {
+  expect_equal(vector_to_str("x"), '"x"')
+  expect_equal(vector_to_str(c("x", "y")), 'c("x", "y")')
 })
 
 
-
-test_that("throttle", {
-  a <- 0
-  f <- function(n) {
-    a <<- a + n
-  }
-  throttled <- throttle(0.05)
-  t1 <- Sys.time() + 0.5
-  while (Sys.time() < t1) {
-    throttled(f(1))
-  }
-  expect_lte(a, 11)
-  expect_gte(a, 2) # this is hard on the very slow mac runner
+test_that("can convert numbers to ordinals", {
+  expect_equal(ordinal(1), "1st")
+  expect_equal(ordinal(2), "2nd")
+  expect_equal(ordinal(3), "3rd")
+  expect_equal(ordinal(4), "4th")
+  expect_equal(ordinal(11), "11th")
+  expect_equal(ordinal(12), "12th")
+  expect_equal(ordinal(13), "13th")
+  expect_equal(ordinal(14), "14th")
+  expect_equal(ordinal(21), "21st")
+  expect_equal(ordinal(22), "22nd")
+  expect_equal(ordinal(23), "23rd")
+  expect_equal(ordinal(24), "24th")
+  expect_equal(ordinal(43221), "43221st")
 })
 
 
-test_that("Can extract package name", {
-  f <- function(x) {
-    ref_to_package_name(pkgdepends::parse_pkg_ref(x))
-  }
-  expect_equal(f("./pkg.tar.gz"), "pkg")
-  expect_equal(f("./pkg_0.1-2.tar.gz"), "pkg")
-  expect_equal(f("./pkg_0.1-2.tgz"), "pkg")
-  expect_equal(f("./pkg_0.1-2.zip"), "pkg")
-  expect_equal(f("local::pkg.tar.gz"), "pkg")
-  expect_equal(f("user/repo"), "repo")
-  expect_equal(f("std"), "std")
+test_that("don't warn when reading from files without newlines", {
+  path <- withr::local_tempfile()
+  writeLines("hello", sep = "", path)
+  expect_warning(readLines(path))
+  expect_no_warning(read_lines(path))
 })

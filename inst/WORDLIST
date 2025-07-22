@@ -1,9 +1,15 @@
+CMD
+HPC
+HTC
+WIP
 codecov
+conan
+config
 dryrun
 etc
-HPC
 img
 io
 pkgdepends
 src
 standalone
+th

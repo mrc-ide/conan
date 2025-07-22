@@ -1,12 +1,23 @@
-clean_paths <- function(p) {
-  vapply(p, normalizePath, "", USE.NAMES = FALSE)
+bootstrap_library <- function(pkg) {
+  if (length(pkg) == 0) {
+    .libPaths()[[1]]
+  } else {
+    dirname(find.package(pkg))
+  }
 }
 
 
-skip_unless_ci <- function() {
-  testthat::skip_on_cran()
-  if (isTRUE(as.logical(Sys.getenv("CI")))) {
-    return(invisible(TRUE))
+example_installations <- function(path, n = NULL) {
+  fs::dir_create(file.path(path, ".conan"))
+  path_rds <- "examples/installations.rds"
+  if (file.exists("tests/testthat")) {
+    path_rds <- file.path("tests/testthat", path_rds)
   }
-  testthat::skip("Not on CI")
+  d <- readRDS(path_rds)
+  n <- n %||% length(d)
+  nms <- names(d)[seq_len(n)]
+  for (nm in nms) {
+    saveRDS(d[[nm]], file.path(path, ".conan", nm))
+  }
+  nms
 }

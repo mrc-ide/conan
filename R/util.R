@@ -3,172 +3,120 @@
 }
 
 
-find_functions <- function(fun, env) {
-  ours <- names(env)
-  ours <- ours[vapply(ours, function(x) is.function(env[[x]]), TRUE)]
-  seen <- fun
-  test <- lapply(fun, function(x) env[[x]])
-  while (length(test) > 0L) {
-    new <- setdiff(intersect(all.vars(body(test[[1L]]), TRUE), ours), seen)
-    seen <- c(seen, new)
-    test <- c(test[-1L], lapply(new, get, env, inherits = FALSE))
+glue_whisker <- function(template, data) {
+  transformer <- function(...) {
+    ## This transformer prevents a NULL entry destroying the string
+    glue::identity_transformer(...) %||% ""
   }
-  sort(unique(seen))
+  glue::glue_data(data, template, .open = "{{", .close = "}}", .trim = FALSE,
+                  .transformer = transformer)
 }
 
 
-deparse_fn <- function(nm, ...) {
-  value <- trimws(deparse(get(nm, ...)), "right")
-  if (grepl("%", nm)) {
-    nm <- sprintf("`%s`", nm)
+conan_file <- function(path) {
+  system.file(path, package = "conan", mustWork = TRUE)
+}
+
+
+read_lines <- function(path) {
+  ## never warn about trailing newlines.  Unfortunately this will also
+  ## not warn about embedded null's but that's rare and also usually
+  ## not a very helpful warning for users to see.
+  readLines(path, warn = FALSE)
+}
+
+
+read_string <- function(path) {
+  paste(read_lines(path), collapse = "\n")
+}
+
+
+squote <- function(x) {
+  sprintf("'%s'", x)
+}
+
+
+vector_to_str <- function(x) {
+  str <- paste(sprintf('"%s"', x), collapse = ", ")
+  if (length(x) > 1) {
+    str <- sprintf("c(%s)", str)
   }
+  str
+}
+
+
+list_to_str <- function(x) {
+  paste(trimws(utils::capture.output(dput(x)), "right"), collapse = "\n")
+}
+
+
+collapseq <- function(x, last = NULL) {
+  paste(squote(x), collapse = ", ")
+}
+
+
+dir_create <- function(path) {
+  dir.create(path, FALSE, TRUE)
+}
+
+
+vcapply <- function(...) {
+  vapply(..., FUN.VALUE = "")
+}
+
+
+vlapply <- function(...) {
+  vapply(..., FUN.VALUE = TRUE)
+}
+
+
+deparse_fn <- function(nm, indent = 0) {
+  value <- trimws(deparse(get(nm)), "right")
   value[[1]] <- sprintf("%s <- %s", nm, value[[1]])
-  value
+  paste0(strrep(" ", indent), value, collapse = "\n")
 }
 
 
-extract_code <- function(nm, env = NULL) {
-  if (is.null(env)) {
-    env <- environment(extract_code)
-  }
-  fns <- find_functions(nm, env)
-  unlist(lapply(fns, deparse_fn, envir = env))
+short_sha <- function(x) {
+  sub("([[:xdigit:]]{7})[[:xdigit:]]{33}", "\\1", x)
 }
 
 
-clean_repos <- function(repos, cran = NULL) {
-  if (is.null(repos)) {
-    return(c(CRAN = default_cran(cran)))
-  }
-  if (!("CRAN" %in% names(repos)) || repos[["CRAN"]] == "@CRAN@") {
-    repos[["CRAN"]] <- default_cran(cran)
-  }
-  repos
-}
-
-
-default_cran <- function(cran = NULL) {
-  cran %||% "https://cloud.r-project.org"
-}
-
-
-ref_to_package_name <- function(ref) {
-  if (ref$type == "local") {
-    sub("(_.*)?\\.(tar.gz|tgz|zip)", "", basename(ref$path))
+## R time objects really want me poke my eyes out.  Perhaps there is a
+## better way of doing this?  Who knows?
+unlist_times <- function(x) {
+  if (length(x) == 0L) {
+    empty_time()
   } else {
-    ref$package
+    i <- vapply(x, inherits, TRUE, "POSIXlt")
+    x[i] <- lapply(x[i], as.POSIXct)
+    ret <- vapply(x, as.numeric, numeric(1))
+    attributes(ret) <- attributes(x[[1L]])
+    ret
   }
 }
 
 
-write_script_exec <- function(code, path) {
-  writeLines(code, path)
-  Sys.chmod(path, "755")
-  invisible(path)
+empty_time <- function() {
+  Sys.time()[-1]
 }
 
 
-deparse_str <- function(x) {
-  paste(deparse(x), collapse = "\n")
+set_names <- function(x, nms) {
+  names(x) <- nms
+  x
 }
 
 
-throttle <- function(interval) {
-  last <- Sys.time() - interval
-  function(expr) {
-    wait <- interval - (Sys.time() - last)
-    if (wait > 0) {
-      Sys.sleep(wait)
-    }
-    last <<- Sys.time()
-    force(expr)
-  }
-}
-
-
-new_log <- function(curr, prev) {
-  if (length(prev) == 0) {
-    curr
+ordinal <- function(n) {
+  if (n == 1 || n > 20 && n %% 10 == 1) {
+    suffix <- "st"
+  } else if (n == 2 || n > 20 && n %% 10 == 2) {
+    suffix <- "nd"
+  } else if (n == 3 || n > 20 && n %% 10 == 3) {
+    suffix <- "rd"
   } else {
-    curr[-seq_along(prev)]
+    suffix <- "th"
   }
-}
-
-
-clear_progress_bar <- function(p) {
-  private <- environment(p$tick)$private
-  if (is.null(private)) {
-    return()
-  }
-  if (nchar(private$last_draw) > 0) {
-    str <- paste0(c("\r", rep(" ", private$width)), collapse = "")
-    message(str, appendLF = FALSE)
-  }
-  message("\r", appendLF = FALSE)
-}
-
-
-img_boots <- function() {
-  ## https://www.asciiart.eu/clothing-and-accessories/footwear
-  c("     ._......",
-    "     |X/.*| |",
-    "     |X/+ | |",
-    "     |X/* | |",
-    "____/     ; ;",
-    "\\_____/|_/_/")
-}
-
-
-img_axe <- function() {
-  ## https://www.asciiart.eu/weapons/axes
-  c("  ,:\\      /:.",
-    " //  \\_()_/  \\\\",
-    "||   |    |   ||",
-    "||   |    |   ||",
-    "||   |____|   ||",
-    " \\\\  / || \\  //",
-    "  `:/  ||  \\;'",
-    "       ||",
-    "       ||",
-    "       XX",
-    "       XX",
-    "       XX",
-    "       XX",
-    "       OO",
-    "       `'")
-}
-
-
-pad_right <- function(x) {
-  n <- nchar(x)
-  paste0(x, strrep(" ", max(n) - n))
-}
-
-
-prefix_message_build <- function(img, skip, title, data) {
-  txt <- vector("list", length(data))
-  lhs <- pad_right(paste0(names(data), ":"))
-  i <- vapply(data, is.list, TRUE)
-  if (any(i)) {
-    txt[i] <- Map(c,
-                  trimws(lhs[i]),
-                  lapply(unname(data[i]), function(x) paste("  *", x)))
-  }
-  txt[!i] <- paste(lhs[!i], vapply(data[!i], identity, "", USE.NAMES = FALSE))
-  txt <- unlist(c(list(title), txt))
-
-  npad_vertical <- 1 + max(0, length(txt) + skip - length(img))
-  ret <- pad_right(c(img, rep("", npad_vertical)))
-  i <- seq_along(txt) + skip
-  ret[i] <- paste(ret[i], txt, sep = "  ")
-  ret <- trimws(ret, "right")
-
-  ret
-}
-
-
-prefix_message <- function(img, skip, title, data) {
-  for (line in prefix_message_build(img, skip, title, data)) {
-    message(line)
-  }
+  paste0(n, suffix)
 }
