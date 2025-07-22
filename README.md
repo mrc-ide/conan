@@ -53,7 +53,7 @@ Please install from our [r-universe](https://mrc-ide.r-universe.dev/):
 
 ```r
 install.packages(
-  "conan2",
+  "conan",
   repos = c("https://mrc-ide.r-universe.dev", "https://cloud.r-project.org"))
 ```
 
