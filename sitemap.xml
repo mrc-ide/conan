@@ -1,39 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/conan.html</loc>
-  </url>
-  <url>
-    <loc>/reference/conan_bootstrap.html</loc>
-  </url>
-  <url>
-    <loc>/reference/conan_check.html</loc>
-  </url>
-  <url>
-    <loc>/reference/conan_dryrun.html</loc>
-  </url>
-  <url>
-    <loc>/reference/conan_install.html</loc>
-  </url>
-  <url>
-    <loc>/reference/conan_sources.html</loc>
-  </url>
-  <url>
-    <loc>/reference/conan_watch.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://mrc-ide.github.io/conan/404.html</loc></url>
+<url><loc>https://mrc-ide.github.io/conan/LICENSE-text.html</loc></url>
+<url><loc>https://mrc-ide.github.io/conan/authors.html</loc></url>
+<url><loc>https://mrc-ide.github.io/conan/index.html</loc></url>
+<url><loc>https://mrc-ide.github.io/conan/reference/conan_compare.html</loc></url>
+<url><loc>https://mrc-ide.github.io/conan/reference/conan_configure.html</loc></url>
+<url><loc>https://mrc-ide.github.io/conan/reference/conan_describe.html</loc></url>
+<url><loc>https://mrc-ide.github.io/conan/reference/conan_list.html</loc></url>
+<url><loc>https://mrc-ide.github.io/conan/reference/conan_run.html</loc></url>
+<url><loc>https://mrc-ide.github.io/conan/reference/conan_write.html</loc></url>
+<url><loc>https://mrc-ide.github.io/conan/reference/index.html</loc></url>
 </urlset>
+
