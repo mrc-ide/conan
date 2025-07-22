@@ -2,7 +2,7 @@ Package: conan
 Title: Conan the Librarian
 Version: 2.0.0
 Authors@R: c(person("Rich", "FitzJohn", role = c("aut", "cre"),
-                    email = "rich.fitzjohn@gmail.com")
+                    email = "rich.fitzjohn@gmail.com"),
              person("Wes", "Hinsley", role = c("aut"),
                     email = "w.hinsley@imperial.ac.uk"),
              person("Imperial College of Science, Technology and Medicine",
